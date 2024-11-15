@@ -1,27 +1,97 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+ 
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Darker, cozier Christmas theme colors */
+    --background: 346 30% 95%;  /* Warmer, slightly darker background */
+    --foreground: 346 84% 20%;  /* Deep red */
+    
+    --card: 346 30% 97%;  /* Slightly tinted card background */
+    --card-foreground: 346 84% 20%;
+ 
+    --popover: 346 30% 97%;
+    --popover-foreground: 346 84% 20%;
+ 
+    /* Rich Christmas red */
+    --primary: 346 84% 37%;  
+    --primary-foreground: 0 0% 100%;
+ 
+    /* Deep pine green */
+    --secondary: 151 40% 35%;  
+    --secondary-foreground: 0 0% 100%;
+ 
+    --muted: 346 25% 90%;
+    --muted-foreground: 346 40% 40%;
+ 
+    /* Warm gold */
+    --accent: 45 80% 50%;  
+    --accent-foreground: 0 0% 100%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Warmer borders */
+    --border: 346 35% 85%;
+    --input: 346 35% 85%;
+    --ring: 346 84% 37%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    /* Darker, richer dark mode */
+    --background: 346 30% 8%;  /* Deeper dark background */
+    --foreground: 0 0% 98%;
+ 
+    --card: 346 30% 10%;
+    --card-foreground: 0 0% 98%;
+ 
+    --popover: 346 30% 10%;
+    --popover-foreground: 0 0% 98%;
+ 
+    /* Brighter Christmas red for dark mode */
+    --primary: 346 84% 45%;  
+    --primary-foreground: 0 0% 100%;
+ 
+    /* Brighter green for dark mode */
+    --secondary: 151 40% 40%;  
+    --secondary-foreground: 0 0% 100%;
+ 
+    --muted: 346 40% 15%;
+    --muted-foreground: 346 40% 70%;
+ 
+    /* Brighter gold for dark mode */
+    --accent: 45 85% 55%;  
+    --accent-foreground: 0 0% 100%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 346 40% 15%;
+    --input: 346 40% 15%;
+    --ring: 346 84% 45%;
   }
 }
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-image: 
+      radial-gradient(
+        circle at top left,
+        hsl(346 30% 93%) 0%,
+        transparent 20%
+      ),
+      radial-gradient(
+        circle at bottom right,
+        hsl(151 30% 93%) 0%,
+        transparent 20%
+      );
+    background-attachment: fixed;
   }
 }
