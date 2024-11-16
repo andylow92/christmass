@@ -364,63 +364,55 @@ const ChristmasWishlist = () => {
                                 </div>
                               </div>
                             ) : (
-                              <div className="flex justify-between items-start">
-                                <div className="space-y-2">
-                                  <h3 className="font-semibold flex items-center gap-2 text-green-700">
-                                    {gift.item}
-                                    <span className={`${getStatusColor(gift.status)} p-1 rounded-full`}>
-                                      {getStatusIcon(gift.status)}
-                                    </span>
-                                  </h3>
-                                  <p className="text-sm text-gray-600">
-                                    <TextWithLinks text={gift.description || ''} />
-                                  </p>
-                                  <p className="text-sm font-medium text-green-600">{gift.priceRange}</p>
-                                </div>
-                                <div className="flex gap-2 items-start">
-                                  <Select
-                                    value={gift.status || 'pending'}
-                                    onValueChange={(value: GiftStatus) => updateGiftStatus(gift.id, value)}
-                                  >
-                                    <SelectTrigger className="w-[130px] border-green-200">
-                                      <SelectValue placeholder="Status" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="pending">Available</SelectItem>
-                                      <SelectItem value="will_buy">I'll Buy This!</SelectItem>
-                                      <SelectItem value="bought">Bought</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                  <Button 
-                                    variant="outline" 
-                                    size="icon"
-                                    className="border-green-200 text-green-600 hover:bg-green-50"
-                                    onClick={() => startEditing(gift)}
-                                  >
-                                    <Pencil className="h-4 w-4" />
-                                  </Button>
-                                  <Button 
-                                    variant="outline" 
-                                    size="icon"
-                                    className="border-green-200 text-green-600 hover:bg-green-50"
-                                    onClick={() => startEditing(gift)}
-                                  >
-                                    <Pencil className="h-4 w-4" />
-                                  </Button>
-                                  <Button 
-                                    variant="outline" 
-                                    size="icon"
-                                    className="border-red-200 text-red-600 hover:bg-red-50"
-                                    onClick={() => deleteGift(gift.id)}
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                            )}
-                          </CardContent>
-                        </Card>
-                      ))}
+<div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                <div className="space-y-2 min-w-0 flex-1">
+                  <h3 className="font-semibold flex items-center gap-2 text-green-700">
+                    {gift.item}
+                    <span className={`${getStatusColor(gift.status)} p-1 rounded-full`}>
+                      {getStatusIcon(gift.status)}
+                    </span>
+                  </h3>
+                  <div className="text-sm text-gray-600 break-words">
+                    <TextWithLinks text={gift.description || ''} />
+                  </div>
+                  <p className="text-sm font-medium text-green-600">{gift.priceRange}</p>
+                </div>
+                <div className="flex gap-2 items-start shrink-0">
+                  <Select
+                    value={gift.status || 'pending'}
+                    onValueChange={(value: GiftStatus) => updateGiftStatus(gift.id, value)}
+                  >
+                    <SelectTrigger className="w-[130px] border-green-200">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">Available</SelectItem>
+                      <SelectItem value="will_buy">I'll Buy This!</SelectItem>
+                      <SelectItem value="bought">Bought</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    className="border-green-200 text-green-600 hover:bg-green-50"
+                    onClick={() => startEditing(gift)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    className="border-red-200 text-red-600 hover:bg-red-50"
+                    onClick={() => deleteGift(gift.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      ))}
                     </div>
                   </CardContent>
                 </Card>
