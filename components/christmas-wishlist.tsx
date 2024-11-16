@@ -16,16 +16,45 @@ import {
 import { User, Gift as GiftType } from '../lib/db/schema';
 
 type GiftStatus = 'pending' | 'will_buy' | 'bought';
-// Update the ExtendedGift interface to properly extend GiftType
 interface ExtendedGift extends Omit<GiftType, 'status'> {
   status: GiftStatus | null;
 }
 
+// URL detection regex pattern
+const urlPattern = /(https?:\/\/[^\s]+)/g;
+
+// Component to render text with clickable links
+const TextWithLinks = ({ text }: { text: string }) => {
+  if (!text) return null;
+
+  const parts = text.split(urlPattern);
+  
+  return (
+    <span>
+      {parts.map((part, i) => {
+        if (part.match(urlPattern)) {
+          return (
+            <a
+              key={i}
+              href={part}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              {part}
+            </a>
+          );
+        }
+        return part;
+      })}
+    </span>
+  );
+};
 
 const ChristmasWishlist = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [gifts, setGifts] = useState<ExtendedGift[]>([]);
-    const [newUser, setNewUser] = useState('');
+  const [newUser, setNewUser] = useState('');
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [editingGift, setEditingGift] = useState<number | null>(null);
   const [editedGift, setEditedGift] = useState({
@@ -194,7 +223,6 @@ const ChristmasWishlist = () => {
     }
   };
 
-  // Enhanced status color function
   const getStatusColor = (status: GiftStatus | null | undefined) => {
     switch (status) {
       case 'bought':
@@ -205,6 +233,7 @@ const ChristmasWishlist = () => {
         return 'text-gray-600 bg-gray-50';
     }
   };
+
   const getStatusIcon = (status: GiftStatus | null | undefined) => {
     switch (status) {
       case 'bought':
@@ -219,7 +248,6 @@ const ChristmasWishlist = () => {
   const selectedUserGifts = selectedUser 
     ? gifts.filter(gift => gift.userId === selectedUser)
     : [];
-
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 p-4">
@@ -280,7 +308,7 @@ const ChristmasWishlist = () => {
                       <div>
                         <Label className="text-green-700">Description</Label>
                         <Textarea
-                          placeholder="Add any specific details..."
+                          placeholder="Add any specific details... URLs will become clickable links!"
                           value={newGift.description}
                           onChange={(e) => setNewGift({ ...newGift, description: e.target.value })}
                           className="border-green-200 focus:border-green-300"
@@ -344,7 +372,9 @@ const ChristmasWishlist = () => {
                                       {getStatusIcon(gift.status)}
                                     </span>
                                   </h3>
-                                  <p className="text-sm text-gray-600">{gift.description}</p>
+                                  <p className="text-sm text-gray-600">
+                                    <TextWithLinks text={gift.description || ''} />
+                                  </p>
                                   <p className="text-sm font-medium text-green-600">{gift.priceRange}</p>
                                 </div>
                                 <div className="flex gap-2 items-start">
@@ -361,6 +391,14 @@ const ChristmasWishlist = () => {
                                       <SelectItem value="bought">Bought</SelectItem>
                                     </SelectContent>
                                   </Select>
+                                  <Button 
+                                    variant="outline" 
+                                    size="icon"
+                                    className="border-green-200 text-green-600 hover:bg-green-50"
+                                    onClick={() => startEditing(gift)}
+                                  >
+                                    <Pencil className="h-4 w-4" />
+                                  </Button>
                                   <Button 
                                     variant="outline" 
                                     size="icon"
