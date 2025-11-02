@@ -84,19 +84,19 @@ export default function SignupPage() {
       <div className="absolute top-10 right-10 text-red-300/30 animate-pulse">
         <Snowflake className="h-16 w-16" />
       </div>
-      <div className="absolute top-1/4 left-10 text-green-300/30 animate-pulse" style={{ animationDelay: '1s' }}>
+      <div className="absolute top-1/4 left-10 text-emerald-300/25 animate-pulse" style={{ animationDelay: '1s' }}>
         <Sparkles className="h-12 w-12" />
       </div>
       <div className="absolute bottom-1/4 right-20 text-red-300/30 animate-pulse" style={{ animationDelay: '2s' }}>
         <Sparkles className="h-14 w-14" />
       </div>
-      <div className="absolute bottom-10 left-10 text-green-300/30 animate-pulse" style={{ animationDelay: '1.5s' }}>
+      <div className="absolute bottom-10 left-10 text-emerald-300/25 animate-pulse" style={{ animationDelay: '1.5s' }}>
         <Snowflake className="h-20 w-20" />
       </div>
 
       <Card className="w-full max-w-md glass-strong shadow-2xl border-white/30 relative z-10 overflow-hidden">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-transparent to-red-500/20 animate-pulse" style={{ animationDuration: '3s' }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 via-transparent to-red-500/15 animate-pulse" style={{ animationDuration: '3s' }}></div>
 
         <CardHeader className="space-y-3 text-center relative z-10 pb-8">
           <div className="flex justify-center mb-2">
@@ -122,7 +122,7 @@ export default function SignupPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-white/60 focus:ring-white/30"
+                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30"
               />
             </div>
 
@@ -135,7 +135,7 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-white/60 focus:ring-white/30"
+                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30"
               />
             </div>
 
@@ -149,7 +149,7 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-white/60 focus:ring-white/30"
+                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30"
               />
             </div>
 
@@ -163,7 +163,7 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 minLength={6}
-                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-white/60 focus:ring-white/30"
+                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30"
               />
             </div>
 
@@ -175,7 +175,7 @@ export default function SignupPage() {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-green-500 to-red-600 hover:from-green-600 hover:to-red-700 text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all duration-200 border-0"
+              className="w-full bg-gradient-to-r from-emerald-700 to-red-600 hover:from-emerald-800 hover:to-red-700 text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all duration-200 border-0 festive-glow"
               disabled={isLoading}
             >
               {isLoading ? (
