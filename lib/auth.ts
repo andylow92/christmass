@@ -91,7 +91,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           if (user) {
             session.user.id = user.id.toString();
             session.user.name = user.name;
-            session.user.email = user.email || undefined;
+            session.user.email = user.email || '';
           }
         }
       }
