@@ -42,9 +42,9 @@ const TextWithLinks = ({ text }: { text: string }) => {
               href={part}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-amber-300 hover:text-amber-200 underline font-medium"
+              className="inline-flex items-center gap-1 text-emerald-300 hover:text-emerald-200 underline font-medium transition-colors duration-200 hover:underline-offset-4"
             >
-              {part}
+              🔗 {part}
             </a>
           );
         }
@@ -358,10 +358,15 @@ const ChristmasWishlist = () => {
                                       {getStatusIcon(gift.status)}
                                     </span>
                                   </h3>
-                                  <div className="text-sm text-amber-50/90 break-words">
+                                  <div className="text-sm text-amber-50/95 break-words leading-relaxed">
                                     <TextWithLinks text={gift.description || ''} />
                                   </div>
-                                  <p className="text-sm font-semibold text-amber-200">{gift.priceRange}</p>
+                                  {gift.priceRange && (
+                                    <div className="inline-flex items-center gap-1.5 bg-emerald-900/40 px-3 py-1.5 rounded-full border border-emerald-400/30">
+                                      <span className="text-lg">💰</span>
+                                      <span className="text-sm font-bold text-emerald-200">{gift.priceRange}</span>
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="flex gap-2 items-start shrink-0">
                                   <Select
