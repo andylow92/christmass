@@ -264,7 +264,7 @@ const ChristmasWishlist = () => {
                   variant={selectedUser === user.id ? "default" : "outline"}
                   className={selectedUser === user.id
                     ? "bg-gradient-to-r from-emerald-700 to-green-700 hover:from-emerald-800 hover:to-green-800 text-white border-0 shadow-lg font-semibold transition-all duration-300 hover:scale-105 festive-glow"
-                    : "glass border-white/30 text-white hover:bg-white/20 font-medium transition-all duration-300 hover:scale-105 hover:border-white/50"}
+                    : "glass border-white/30 text-amber-50 hover:bg-white/20 font-medium transition-all duration-300 hover:scale-105 hover:border-white/50"}
                   onClick={() => setSelectedUser(user.id)}
                 >
                   {user.name}
@@ -275,35 +275,35 @@ const ChristmasWishlist = () => {
 
             {selectedUser && (
               <div className="mt-4">
-                <Card className="glass-card border-white/20 shadow-xl">
+                <Card className="glass-strong border-white/35 shadow-xl">
                   <CardContent className="pt-6">
                     {isCurrentUserSelected && (
                       <div className="space-y-4 mb-6">
                         <div>
-                          <Label className="text-white/90 font-medium">Gift Item</Label>
+                          <Label className="text-amber-50 font-medium">Gift Item</Label>
                           <Input
                             placeholder="What would you like?"
                             value={newGift.item}
                             onChange={(e) => setNewGift({ ...newGift, item: e.target.value })}
-                            className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
+                            className="glass border-white/30 text-amber-50 placeholder:text-amber-50/60 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
                           />
                         </div>
                         <div>
-                          <Label className="text-white/90 font-medium">Description</Label>
+                          <Label className="text-amber-50 font-medium">Description</Label>
                           <Textarea
                             placeholder="Add any specific details... URLs will become clickable links!"
                             value={newGift.description}
                             onChange={(e) => setNewGift({ ...newGift, description: e.target.value })}
-                            className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
+                            className="glass border-white/30 text-amber-50 placeholder:text-amber-50/60 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
                           />
                         </div>
                         <div>
-                          <Label className="text-white/90 font-medium">Price Range</Label>
+                          <Label className="text-amber-50 font-medium">Price Range</Label>
                           <Input
                             placeholder="$20-30"
                             value={newGift.priceRange}
                             onChange={(e) => setNewGift({ ...newGift, priceRange: e.target.value })}
-                            className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
+                            className="glass border-white/30 text-amber-50 placeholder:text-amber-50/60 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
                           />
                         </div>
                         <Button
@@ -318,32 +318,32 @@ const ChristmasWishlist = () => {
 
                     <div className="space-y-4">
                       {selectedUserGifts.map((gift) => (
-                        <Card key={gift.id} className="glass-card border-white/20 relative overflow-hidden group">
-                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <Card key={gift.id} className="glass-card border-white/30 relative overflow-hidden group">
+                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/8 to-green-600/8 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <CardContent className="pt-6 relative z-10">
                             {editingGift === gift.id ? (
                               <div className="space-y-4">
                                 <Input
                                   value={editedGift.item}
                                   onChange={(e) => setEditedGift({ ...editedGift, item: e.target.value })}
-                                  className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
+                                  className="glass border-white/30 text-amber-50 placeholder:text-amber-50/60 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
                                 />
                                 <Textarea
                                   value={editedGift.description}
                                   onChange={(e) => setEditedGift({ ...editedGift, description: e.target.value })}
-                                  className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
+                                  className="glass border-white/30 text-amber-50 placeholder:text-amber-50/60 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
                                 />
                                 <Input
                                   value={editedGift.priceRange}
                                   onChange={(e) => setEditedGift({ ...editedGift, priceRange: e.target.value })}
-                                  className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
+                                  className="glass border-white/30 text-amber-50 placeholder:text-amber-50/60 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
                                 />
                                 <div className="flex gap-2">
-                                  <Button onClick={() => saveEdit(gift.id)} size="sm" className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white border-0 shadow-lg transition-all duration-300 hover:scale-105 festive-glow">
+                                  <Button onClick={() => saveEdit(gift.id)} size="sm" className="bg-gradient-to-r from-emerald-700 to-green-700 hover:from-emerald-800 hover:to-green-800 text-white border-0 shadow-lg transition-all duration-300 hover:scale-105 festive-glow">
                                     <Check className="h-4 w-4 mr-1" />
                                     Save
                                   </Button>
-                                  <Button onClick={cancelEditing} variant="outline" size="sm" className="glass border-white/30 text-white hover:bg-white/20 transition-all duration-300 hover:scale-105">
+                                  <Button onClick={cancelEditing} variant="outline" size="sm" className="glass border-white/30 text-amber-50 hover:bg-white/20 transition-all duration-300 hover:scale-105">
                                     <X className="h-4 w-4 mr-1" />
                                     Cancel
                                   </Button>
@@ -352,29 +352,29 @@ const ChristmasWishlist = () => {
                             ) : (
                               <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                 <div className="space-y-2 min-w-0 flex-1">
-                                  <h3 className="font-bold flex items-center gap-2 text-white text-lg drop-shadow">
+                                  <h3 className="font-bold flex items-center gap-2 text-amber-50 text-lg drop-shadow-lg">
                                     {gift.item}
                                     <span className={`${getStatusColor(gift.status)} p-1.5 rounded-full shadow-lg`}>
                                       {getStatusIcon(gift.status)}
                                     </span>
                                   </h3>
-                                  <div className="text-sm text-white/80 break-words">
+                                  <div className="text-sm text-amber-50/90 break-words">
                                     <TextWithLinks text={gift.description || ''} />
                                   </div>
-                                  <p className="text-sm font-semibold text-emerald-300">{gift.priceRange}</p>
+                                  <p className="text-sm font-semibold text-amber-200">{gift.priceRange}</p>
                                 </div>
                                 <div className="flex gap-2 items-start shrink-0">
                                   <Select
                                     value={gift.status || 'pending'}
                                     onValueChange={(value: GiftStatus) => updateGiftStatus(gift.id, value)}
                                   >
-                                    <SelectTrigger className="w-[140px] glass border-white/30 text-white focus:ring-white/30 transition-all duration-300 hover:border-white/50 hover:bg-white/10">
+                                    <SelectTrigger className="w-[140px] glass border-white/30 text-amber-50 focus:ring-white/30 transition-all duration-300 hover:border-white/50 hover:bg-white/10">
                                       <SelectValue placeholder="Status" />
                                     </SelectTrigger>
                                     <SelectContent className="glass-strong border-white/30">
-                                      <SelectItem value="pending" className="text-white hover:bg-white/20 cursor-pointer transition-all">Available</SelectItem>
-                                      <SelectItem value="will_buy" className="text-white hover:bg-white/20 cursor-pointer transition-all">I&apos;ll Buy This! 🎁</SelectItem>
-                                      <SelectItem value="bought" className="text-white hover:bg-white/20 cursor-pointer transition-all">Bought ✓</SelectItem>
+                                      <SelectItem value="pending" className="text-amber-50 hover:bg-white/20 cursor-pointer transition-all">Available</SelectItem>
+                                      <SelectItem value="will_buy" className="text-amber-50 hover:bg-white/20 cursor-pointer transition-all">I&apos;ll Buy This! 🎁</SelectItem>
+                                      <SelectItem value="bought" className="text-amber-50 hover:bg-white/20 cursor-pointer transition-all">Bought ✓</SelectItem>
                                     </SelectContent>
                                   </Select>
                                   {gift.userId === currentUserId && (
