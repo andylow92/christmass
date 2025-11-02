@@ -1,14 +1,21 @@
 
 // app/api/gifts/route.ts
-// app/api/gifts/route.ts
 import { db } from '@/lib/db';
-import { gifts, users } from '@/lib/db/schema';
+import { gifts } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
 
 export async function GET() {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Return ALL gifts from all users so family members can see each other's wishlists
     const allGifts = await db.select().from(gifts);
+
     return NextResponse.json(allGifts);
   } catch (error) {
     console.error('Error fetching gifts:', error);
@@ -18,24 +25,27 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { userId, item, description, priceRange } = await request.json();
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { item, description, priceRange } = await request.json();
 
     // Validate required fields
-    if (!userId || !item || typeof item !== 'string') {
+    if (!item || typeof item !== 'string') {
       return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
     }
 
-    // Ensure user exists
-    const userExists = await db.select().from(users).where(eq(users.id, userId));
-    if (userExists.length === 0) {
-      return NextResponse.json({ error: 'User not found' }, { status: 400 });
-    }
+    // Use authenticated user's ID
+    const userId = parseInt(session.user.id);
 
     // Insert new gift
     const newGift = await db
       .insert(gifts)
       .values({ userId, item, description, priceRange })
       .returning();
+
     return NextResponse.json(newGift[0]);
   } catch (error) {
     console.error('Error creating gift:', error);

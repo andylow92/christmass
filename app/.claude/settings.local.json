@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run push:*)",
+      "Bash(npx drizzle-kit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
