@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Gift, Plus, Pencil, Trash2, X, Check, ShoppingCart, Package, Sparkles } from 'lucide-react';
+import { Gift, Plus, Pencil, Trash2, X, Check, ShoppingCart, Package } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -31,7 +31,7 @@ const TextWithLinks = ({ text }: { text: string }) => {
   if (!text) return null;
 
   const parts = text.split(urlPattern);
-
+  
   return (
     <span>
       {parts.map((part, i) => {
@@ -42,7 +42,7 @@ const TextWithLinks = ({ text }: { text: string }) => {
               href={part}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-amber-300 hover:text-amber-200 underline font-medium"
+              className="text-blue-600 hover:text-blue-800 underline"
             >
               {part}
             </a>
@@ -135,7 +135,7 @@ const ChristmasWishlist = () => {
       const response = await fetch(`/api/gifts/${giftId}`, {
         method: 'DELETE',
       });
-
+      
       if (response.ok) {
         setGifts(prevGifts => prevGifts.filter(gift => gift.id !== giftId));
       }
@@ -165,12 +165,12 @@ const ChristmasWishlist = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editedGift)
       });
-
+      
       const updatedGift = await response.json();
-
+      
       if (updatedGift.id) {
-        setGifts(prevGifts =>
-          prevGifts.map(gift =>
+        setGifts(prevGifts => 
+          prevGifts.map(gift => 
             gift.id === giftId ? { ...gift, ...editedGift } : gift
           )
         );
@@ -189,12 +189,12 @@ const ChristmasWishlist = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
-
+      
       const updatedGift = await response.json();
-
+      
       if (updatedGift.id) {
-        setGifts(prevGifts =>
-          prevGifts.map(gift =>
+        setGifts(prevGifts => 
+          prevGifts.map(gift => 
             gift.id === giftId ? { ...gift, status: status } : gift
           )
         );
@@ -207,11 +207,11 @@ const ChristmasWishlist = () => {
   const getStatusColor = (status: GiftStatus | null | undefined) => {
     switch (status) {
       case 'bought':
-        return 'text-emerald-700 bg-emerald-100';
+        return 'text-green-600 bg-green-50';
       case 'will_buy':
-        return 'text-amber-700 bg-amber-100';
+        return 'text-blue-600 bg-blue-50';
       default:
-        return 'text-slate-600 bg-slate-100';
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
@@ -233,38 +233,24 @@ const ChristmasWishlist = () => {
   const isCurrentUserSelected = selectedUser === currentUserId;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 p-4 relative z-10">
-      <Card className="glass-strong border-white/30 shadow-2xl overflow-hidden relative group">
-        {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-green-600/5 to-red-600/10 animate-pulse pointer-events-none" style={{ animationDuration: '4s' }}></div>
-
-        {/* Corner decorations */}
-        <div className="absolute top-4 left-4 text-red-400/30 text-2xl animate-pulse">🎄</div>
-        <div className="absolute top-4 right-4 text-red-400/30 text-2xl animate-pulse" style={{ animationDelay: '1s' }}>🎄</div>
-        <div className="absolute bottom-4 left-4 text-amber-300/30 text-xl animate-pulse" style={{ animationDelay: '0.5s' }}>⭐</div>
-        <div className="absolute bottom-4 right-4 text-amber-300/30 text-xl animate-pulse" style={{ animationDelay: '1.5s' }}>⭐</div>
-
-        <CardHeader className="relative z-10 pb-8">
-          <CardTitle className="flex items-center justify-center gap-3 text-white drop-shadow-lg">
-            <div className="relative animate-bounce" style={{ animationDuration: '3s' }}>
-              <Gift className="h-12 w-12 text-emerald-400 drop-shadow-lg filter drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-              <Sparkles className="h-5 w-5 text-amber-300 absolute -top-1 -right-1 animate-pulse" />
-            </div>
-            <span className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-white to-red-400 bg-clip-text text-transparent drop-shadow-2xl">
-              Family Christmas Wishlist
-            </span>
+    <div className="max-w-4xl mx-auto space-y-6 p-4">
+      <Card className="border-2 border-red-100 bg-gradient-to-b from-white to-red-50">
+        <CardHeader className="bg-red-50">
+          <CardTitle className="flex items-center gap-2 text-red-700">
+            <Gift className="h-8 w-8 text-red-600" />
+            <span className="text-2xl font-bold">Family Christmas Wishlist</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 relative z-10">
-          <div className="space-y-6">
-            <div className="flex flex-wrap gap-3">
+        <CardContent className="pt-6">
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
               {users.map((user) => (
                 <Button
                   key={user.id}
                   variant={selectedUser === user.id ? "default" : "outline"}
                   className={selectedUser === user.id
-                    ? "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white border-0 shadow-lg font-semibold transition-all duration-300 hover:scale-105 festive-glow"
-                    : "glass border-white/30 text-white hover:bg-white/20 font-medium transition-all duration-300 hover:scale-105 hover:border-white/50"}
+                    ? "bg-green-600 hover:bg-green-700 text-white"
+                    : "border-green-200 text-green-700 hover:bg-green-50"}
                   onClick={() => setSelectedUser(user.id)}
                 >
                   {user.name}
@@ -275,40 +261,40 @@ const ChristmasWishlist = () => {
 
             {selectedUser && (
               <div className="mt-4">
-                <Card className="glass-card border-white/20 shadow-xl">
+                <Card className="border-2 border-green-100">
                   <CardContent className="pt-6">
                     {isCurrentUserSelected && (
                       <div className="space-y-4 mb-6">
                         <div>
-                          <Label className="text-white/90 font-medium">Gift Item</Label>
+                          <Label className="text-green-700">Gift Item</Label>
                           <Input
                             placeholder="What would you like?"
                             value={newGift.item}
                             onChange={(e) => setNewGift({ ...newGift, item: e.target.value })}
-                            className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-400 focus:ring-emerald-400/30 transition-all duration-300"
+                            className="border-green-200 focus:border-green-300"
                           />
                         </div>
                         <div>
-                          <Label className="text-white/90 font-medium">Description</Label>
+                          <Label className="text-green-700">Description</Label>
                           <Textarea
                             placeholder="Add any specific details... URLs will become clickable links!"
                             value={newGift.description}
                             onChange={(e) => setNewGift({ ...newGift, description: e.target.value })}
-                            className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-400 focus:ring-emerald-400/30 transition-all duration-300"
+                            className="border-green-200 focus:border-green-300"
                           />
                         </div>
                         <div>
-                          <Label className="text-white/90 font-medium">Price Range</Label>
+                          <Label className="text-green-700">Price Range</Label>
                           <Input
                             placeholder="$20-30"
                             value={newGift.priceRange}
                             onChange={(e) => setNewGift({ ...newGift, priceRange: e.target.value })}
-                            className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-400 focus:ring-emerald-400/30 transition-all duration-300"
+                            className="border-green-200 focus:border-green-300"
                           />
                         </div>
                         <Button
                           onClick={addGift}
-                          className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white border-0 shadow-lg font-semibold transition-all duration-300 hover:scale-105 festive-glow"
+                          className="bg-green-600 hover:bg-green-700 text-white"
                         >
                           <Plus className="h-4 w-4 mr-2" />
                           Add to My Wishlist
@@ -318,32 +304,31 @@ const ChristmasWishlist = () => {
 
                     <div className="space-y-4">
                       {selectedUserGifts.map((gift) => (
-                        <Card key={gift.id} className="glass-card border-white/20 relative overflow-hidden group">
-                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                          <CardContent className="pt-6 relative z-10">
+                        <Card key={gift.id} className="border-green-100 hover:border-green-200 transition-colors">
+                          <CardContent className="pt-6">
                             {editingGift === gift.id ? (
                               <div className="space-y-4">
                                 <Input
                                   value={editedGift.item}
                                   onChange={(e) => setEditedGift({ ...editedGift, item: e.target.value })}
-                                  className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-400 focus:ring-emerald-400/30 transition-all duration-300"
+                                  className="border-green-200"
                                 />
                                 <Textarea
                                   value={editedGift.description}
                                   onChange={(e) => setEditedGift({ ...editedGift, description: e.target.value })}
-                                  className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-400 focus:ring-emerald-400/30 transition-all duration-300"
+                                  className="border-green-200"
                                 />
                                 <Input
                                   value={editedGift.priceRange}
                                   onChange={(e) => setEditedGift({ ...editedGift, priceRange: e.target.value })}
-                                  className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-400 focus:ring-emerald-400/30 transition-all duration-300"
+                                  className="border-green-200"
                                 />
                                 <div className="flex gap-2">
-                                  <Button onClick={() => saveEdit(gift.id)} size="sm" className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white border-0 shadow-lg transition-all duration-300 hover:scale-105 festive-glow">
+                                  <Button onClick={() => saveEdit(gift.id)} size="sm" className="bg-green-600 hover:bg-green-700">
                                     <Check className="h-4 w-4 mr-1" />
                                     Save
                                   </Button>
-                                  <Button onClick={cancelEditing} variant="outline" size="sm" className="glass border-white/30 text-white hover:bg-white/20 transition-all duration-300 hover:scale-105">
+                                  <Button onClick={cancelEditing} variant="outline" size="sm" className="border-red-200 text-red-600 hover:bg-red-50">
                                     <X className="h-4 w-4 mr-1" />
                                     Cancel
                                   </Button>
@@ -352,29 +337,29 @@ const ChristmasWishlist = () => {
                             ) : (
                               <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                 <div className="space-y-2 min-w-0 flex-1">
-                                  <h3 className="font-bold flex items-center gap-2 text-white text-lg drop-shadow">
+                                  <h3 className="font-semibold flex items-center gap-2 text-green-700">
                                     {gift.item}
-                                    <span className={`${getStatusColor(gift.status)} p-1.5 rounded-full shadow-lg`}>
+                                    <span className={`${getStatusColor(gift.status)} p-1 rounded-full`}>
                                       {getStatusIcon(gift.status)}
                                     </span>
                                   </h3>
-                                  <div className="text-sm text-white/80 break-words">
+                                  <div className="text-sm text-gray-600 break-words">
                                     <TextWithLinks text={gift.description || ''} />
                                   </div>
-                                  <p className="text-sm font-semibold text-emerald-400">{gift.priceRange}</p>
+                                  <p className="text-sm font-medium text-green-600">{gift.priceRange}</p>
                                 </div>
                                 <div className="flex gap-2 items-start shrink-0">
                                   <Select
                                     value={gift.status || 'pending'}
                                     onValueChange={(value: GiftStatus) => updateGiftStatus(gift.id, value)}
                                   >
-                                    <SelectTrigger className="w-[140px] glass border-white/30 text-white focus:ring-white/30 transition-all duration-300 hover:border-white/50 hover:bg-white/10">
+                                    <SelectTrigger className="w-[130px] border-green-200">
                                       <SelectValue placeholder="Status" />
                                     </SelectTrigger>
-                                    <SelectContent className="glass-strong border-white/30">
-                                      <SelectItem value="pending" className="text-white hover:bg-white/20 cursor-pointer transition-all">Available</SelectItem>
-                                      <SelectItem value="will_buy" className="text-white hover:bg-white/20 cursor-pointer transition-all">I'll Buy This! 🎁</SelectItem>
-                                      <SelectItem value="bought" className="text-white hover:bg-white/20 cursor-pointer transition-all">Bought ✓</SelectItem>
+                                    <SelectContent>
+                                      <SelectItem value="pending">Available</SelectItem>
+                                      <SelectItem value="will_buy">I'll Buy This!</SelectItem>
+                                      <SelectItem value="bought">Bought</SelectItem>
                                     </SelectContent>
                                   </Select>
                                   {gift.userId === currentUserId && (
@@ -382,7 +367,7 @@ const ChristmasWishlist = () => {
                                       <Button
                                         variant="outline"
                                         size="icon"
-                                        className="glass border-white/30 text-emerald-400 hover:text-emerald-300 hover:bg-white/20 transition-all duration-300 hover:scale-110 hover:rotate-3"
+                                        className="border-green-200 text-green-600 hover:bg-green-50"
                                         onClick={() => startEditing(gift)}
                                       >
                                         <Pencil className="h-4 w-4" />
@@ -390,7 +375,7 @@ const ChristmasWishlist = () => {
                                       <Button
                                         variant="outline"
                                         size="icon"
-                                        className="glass border-white/30 text-red-400 hover:text-red-300 hover:bg-white/20 transition-all duration-300 hover:scale-110 hover:rotate-3"
+                                        className="border-red-200 text-red-600 hover:bg-red-50"
                                         onClick={() => deleteGift(gift.id)}
                                       >
                                         <Trash2 className="h-4 w-4" />
@@ -402,7 +387,7 @@ const ChristmasWishlist = () => {
                             )}
                           </CardContent>
                         </Card>
-                      ))}
+      ))}
                     </div>
                   </CardContent>
                 </Card>
