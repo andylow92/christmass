@@ -80,35 +80,31 @@
     @apply border-border;
   }
   body {
-    @apply text-foreground;
-    background: linear-gradient(135deg, #1e3a5f 0%, #2d1b3d 50%, #1e3a5f 100%);
+    background: linear-gradient(135deg, #047857 0%, #059669 50%, #047857 100%);
     background-attachment: fixed;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   }
 
   body::before {
-    content: '';
+    content: '❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄';
     position: fixed;
-    top: 0;
+    top: -50%;
     left: 0;
     width: 100%;
-    height: 100%;
-    background-image:
-      radial-gradient(2px 2px at 20% 30%, white, transparent),
-      radial-gradient(2px 2px at 60% 70%, white, transparent),
-      radial-gradient(1px 1px at 50% 50%, white, transparent),
-      radial-gradient(1px 1px at 80% 10%, white, transparent),
-      radial-gradient(2px 2px at 90% 60%, white, transparent),
-      radial-gradient(1px 1px at 33% 80%, white, transparent),
-      radial-gradient(1px 1px at 70% 20%, white, transparent);
-    background-size: 200% 200%;
-    background-position: 0% 0%, 40% 60%, 80% 20%, 20% 80%, 60% 40%, 10% 90%, 90% 10%;
-    animation: twinkle 8s ease-in-out infinite;
+    height: 150%;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 20px;
+    line-height: 80px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: snowfall 15s linear infinite;
     pointer-events: none;
-    opacity: 0.6;
     z-index: 0;
+    overflow: hidden;
+    word-wrap: break-word;
   }
 
   body::after {
@@ -119,17 +115,26 @@
     width: 100%;
     height: 100%;
     background-image:
-      radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, transparent 2%),
-      radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 2%),
-      radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, transparent 2%),
+      radial-gradient(circle, rgba(16, 185, 129, 0.6) 0%, transparent 2%),
       radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 2%),
-      radial-gradient(circle, rgba(255, 215, 0, 0.7) 0%, transparent 2%);
+      radial-gradient(circle, rgba(52, 211, 153, 0.7) 0%, transparent 2%),
+      radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 2%),
+      radial-gradient(circle, rgba(16, 185, 129, 0.5) 0%, transparent 2%);
     background-size: 4px 4px, 3px 3px, 5px 5px, 3px 3px, 4px 4px;
     background-position: 0 0, 40px 60px, 80px 20px, 20px 80px, 60px 40px;
     animation: sparkleMove 20s linear infinite;
     pointer-events: none;
-    opacity: 0.7;
+    opacity: 0.5;
     z-index: 1;
+  }
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  100% {
+    transform: translateY(100vh) translateX(100px);
   }
 }
 
@@ -165,23 +170,40 @@
 /* Glassmorphism utility classes */
 @layer utilities {
   .glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   }
 
   .glass-strong {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(18px) saturate(170%);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .festive-glow {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3),
+                0 0 40px rgba(16, 185, 129, 0.2),
+                0 0 60px rgba(16, 185, 129, 0.1);
   }
 }
