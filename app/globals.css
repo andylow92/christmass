@@ -80,13 +80,13 @@
     @apply border-border;
   }
   body {
-    background: linear-gradient(135deg, #047857 0%, #059669 50%, #047857 100%);
+    background: linear-gradient(135deg, #065f46 0%, #064e3b 50%, #065f46 100%);
     background-attachment: fixed;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
     color: white;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
   }
 
   body::before {
@@ -115,16 +115,16 @@
     width: 100%;
     height: 100%;
     background-image:
-      radial-gradient(circle, rgba(16, 185, 129, 0.6) 0%, transparent 2%),
-      radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 2%),
-      radial-gradient(circle, rgba(52, 211, 153, 0.7) 0%, transparent 2%),
+      radial-gradient(circle, rgba(5, 150, 105, 0.4) 0%, transparent 2%),
       radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 2%),
-      radial-gradient(circle, rgba(16, 185, 129, 0.5) 0%, transparent 2%);
+      radial-gradient(circle, rgba(6, 95, 70, 0.5) 0%, transparent 2%),
+      radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, transparent 2%),
+      radial-gradient(circle, rgba(5, 150, 105, 0.3) 0%, transparent 2%);
     background-size: 4px 4px, 3px 3px, 5px 5px, 3px 3px, 4px 4px;
     background-position: 0 0, 40px 60px, 80px 20px, 20px 80px, 60px 40px;
     animation: sparkleMove 20s linear infinite;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.4;
     z-index: 1;
   }
 }
@@ -170,40 +170,40 @@
 /* Glassmorphism utility classes */
 @layer utilities {
   .glass {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   }
 
   .glass-strong {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(25px) saturate(200%);
     -webkit-backdrop-filter: blur(25px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(18px) saturate(170%);
     -webkit-backdrop-filter: blur(18px) saturate(170%);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
     transition: all 0.3s ease;
   }
 
   .glass-card:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.35);
     transform: translateY(-2px);
   }
 
   .festive-glow {
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3),
-                0 0 40px rgba(16, 185, 129, 0.2),
-                0 0 60px rgba(16, 185, 129, 0.1);
+    box-shadow: 0 0 15px rgba(5, 150, 105, 0.25),
+                0 0 30px rgba(5, 150, 105, 0.15),
+                0 0 45px rgba(5, 150, 105, 0.08);
   }
 }

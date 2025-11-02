@@ -53,34 +53,34 @@ export default function LoginPage() {
       <div className="absolute top-10 left-10 text-red-400/30 animate-pulse">
         <Snowflake className="h-16 w-16" />
       </div>
-      <div className="absolute top-20 right-20 text-emerald-400/30 animate-pulse" style={{ animationDelay: '1s' }}>
+      <div className="absolute top-20 right-20 text-emerald-300/25 animate-pulse" style={{ animationDelay: '1s' }}>
         <Sparkles className="h-12 w-12" />
       </div>
       <div className="absolute bottom-20 left-20 text-red-400/30 animate-pulse" style={{ animationDelay: '2s' }}>
         <Sparkles className="h-14 w-14" />
       </div>
-      <div className="absolute bottom-10 right-10 text-emerald-400/30 animate-pulse" style={{ animationDelay: '1.5s' }}>
+      <div className="absolute bottom-10 right-10 text-emerald-300/25 animate-pulse" style={{ animationDelay: '1.5s' }}>
         <Snowflake className="h-20 w-20" />
       </div>
 
       <Card className="w-full max-w-md glass-strong shadow-2xl border-white/30 relative z-10 overflow-hidden group">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-green-600/5 to-red-600/10 animate-pulse" style={{ animationDuration: '3s' }}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/8 via-green-700/5 to-red-600/10 animate-pulse" style={{ animationDuration: '3s' }}></div>
 
         {/* Corner decorations */}
         <div className="absolute top-4 left-4 text-red-400/40 text-2xl animate-pulse">🎁</div>
-        <div className="absolute top-4 right-4 text-emerald-400/40 text-2xl animate-pulse" style={{ animationDelay: '1s' }}>🎁</div>
+        <div className="absolute top-4 right-4 text-emerald-300/35 text-2xl animate-pulse" style={{ animationDelay: '1s' }}>🎁</div>
         <div className="absolute bottom-4 left-4 text-amber-300/40 text-xl animate-pulse" style={{ animationDelay: '0.5s' }}>⭐</div>
         <div className="absolute bottom-4 right-4 text-amber-300/40 text-xl animate-pulse" style={{ animationDelay: '1.5s' }}>⭐</div>
 
         <CardHeader className="space-y-3 text-center relative z-10 pb-8">
           <div className="flex justify-center mb-2">
             <div className="relative animate-bounce" style={{ animationDuration: '3s' }}>
-              <Gift className="h-16 w-16 text-emerald-400 drop-shadow-lg filter drop-shadow-[0_0_15px_rgba(16,185,129,0.6)]" />
+              <Gift className="h-16 w-16 text-emerald-300 drop-shadow-lg filter drop-shadow-[0_0_10px_rgba(6,95,70,0.4)]" />
               <Sparkles className="h-6 w-6 text-amber-300 absolute -top-1 -right-1 animate-pulse" />
             </div>
           </div>
-          <CardTitle className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-white to-red-400 bg-clip-text text-transparent drop-shadow-lg">
+          <CardTitle className="text-4xl font-bold bg-gradient-to-r from-emerald-300 via-white to-red-400 bg-clip-text text-transparent drop-shadow-lg">
             Christmas Wishlist
           </CardTitle>
           <p className="text-white/90 text-sm drop-shadow font-medium">Sign in to manage your wishes ✨</p>
@@ -97,7 +97,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-400 focus:ring-emerald-400/30 transition-all duration-300"
+                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
               />
             </div>
 
@@ -110,7 +110,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-400 focus:ring-emerald-400/30 transition-all duration-300"
+                className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30 transition-all duration-300"
               />
             </div>
 
@@ -122,7 +122,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 festive-glow"
+              className="w-full bg-gradient-to-r from-emerald-700 to-green-700 hover:from-emerald-800 hover:to-green-800 text-white font-semibold py-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 festive-glow"
               disabled={isLoading}
             >
               {isLoading ? (
