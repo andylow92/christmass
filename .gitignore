@@ -37,3 +37,6 @@ next-env.d.ts
 
 # claude code
 .claude/
+
+# scripts with sensitive data
+scripts/update-password.ts
