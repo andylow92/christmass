@@ -2,7 +2,6 @@
 // app/api/gifts/route.ts
 import { db } from '@/lib/db';
 import { gifts } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 

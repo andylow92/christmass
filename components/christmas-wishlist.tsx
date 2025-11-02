@@ -373,7 +373,7 @@ const ChristmasWishlist = () => {
                                     </SelectTrigger>
                                     <SelectContent className="glass-strong border-white/30">
                                       <SelectItem value="pending" className="text-white hover:bg-white/20 cursor-pointer transition-all">Available</SelectItem>
-                                      <SelectItem value="will_buy" className="text-white hover:bg-white/20 cursor-pointer transition-all">I'll Buy This! 🎁</SelectItem>
+                                      <SelectItem value="will_buy" className="text-white hover:bg-white/20 cursor-pointer transition-all">I&apos;ll Buy This! 🎁</SelectItem>
                                       <SelectItem value="bought" className="text-white hover:bg-white/20 cursor-pointer transition-all">Bought ✓</SelectItem>
                                     </SelectContent>
                                   </Select>
