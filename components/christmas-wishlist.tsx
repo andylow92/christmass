@@ -226,6 +226,17 @@ const ChristmasWishlist = () => {
     }
   };
 
+  const getCardClass = (status: GiftStatus | null | undefined) => {
+    switch (status) {
+      case 'bought':
+        return 'glass-card-purchased';
+      case 'will_buy':
+        return 'glass-card-claimed';
+      default:
+        return 'glass-card';
+    }
+  };
+
   const selectedUserGifts = selectedUser
     ? gifts.filter(gift => gift.userId === selectedUser)
     : [];
@@ -318,7 +329,7 @@ const ChristmasWishlist = () => {
 
                     <div className="space-y-4">
                       {selectedUserGifts.map((gift) => (
-                        <Card key={gift.id} className="glass-card border-white/30 relative overflow-hidden group">
+                        <Card key={gift.id} className={`${getCardClass(gift.status)} border-white/30 relative overflow-hidden group`}>
                           <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/8 to-green-600/8 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <CardContent className="pt-6 relative z-10">
                             {editingGift === gift.id ? (

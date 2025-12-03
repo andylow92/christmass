@@ -201,6 +201,46 @@
     transform: translateY(-2px);
   }
 
+  /* Claimed - Someone will buy this (amber/gold tint) */
+  .glass-card-claimed {
+    background: rgba(251, 191, 36, 0.2);
+    backdrop-filter: blur(18px) saturate(170%);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(251, 191, 36, 0.15);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card-claimed:hover {
+    background: rgba(251, 191, 36, 0.28);
+    border: 1px solid rgba(251, 191, 36, 0.55);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(251, 191, 36, 0.2);
+    transform: translateY(-2px);
+  }
+
+  /* Purchased - Item has been bought (soft red/festive tint) */
+  .glass-card-purchased {
+    background: rgba(248, 113, 113, 0.18);
+    backdrop-filter: blur(18px) saturate(170%);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(248, 113, 113, 0.12);
+    transition: all 0.3s ease;
+    opacity: 0.85;
+  }
+
+  .glass-card-purchased:hover {
+    background: rgba(248, 113, 113, 0.24);
+    border: 1px solid rgba(248, 113, 113, 0.5);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4),
+                0 0 25px rgba(248, 113, 113, 0.18);
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+
   .festive-glow {
     box-shadow: 0 0 15px rgba(5, 150, 105, 0.25),
                 0 0 30px rgba(5, 150, 105, 0.15),
