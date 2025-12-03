@@ -220,25 +220,23 @@
     transform: translateY(-2px);
   }
 
-  /* Purchased - Item has been bought (soft red/festive tint) */
+  /* Purchased - Item has been bought (festive red tint) */
   .glass-card-purchased {
-    background: rgba(248, 113, 113, 0.18);
+    background: rgba(220, 38, 38, 0.35);
     backdrop-filter: blur(18px) saturate(170%);
     -webkit-backdrop-filter: blur(18px) saturate(170%);
-    border: 1px solid rgba(248, 113, 113, 0.35);
+    border: 1px solid rgba(248, 113, 113, 0.5);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3),
-                0 0 20px rgba(248, 113, 113, 0.12);
+                0 0 25px rgba(220, 38, 38, 0.25);
     transition: all 0.3s ease;
-    opacity: 0.85;
   }
 
   .glass-card-purchased:hover {
-    background: rgba(248, 113, 113, 0.24);
-    border: 1px solid rgba(248, 113, 113, 0.5);
+    background: rgba(220, 38, 38, 0.42);
+    border: 1px solid rgba(248, 113, 113, 0.65);
     box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4),
-                0 0 25px rgba(248, 113, 113, 0.18);
+                0 0 35px rgba(220, 38, 38, 0.3);
     transform: translateY(-2px);
-    opacity: 0.9;
   }
 
   .festive-glow {
