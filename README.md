@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Christmas Wishlist
 
-## Getting Started
+A family Christmas wishlist app where family members can add gift ideas, mark items as purchased, and coordinate gift-giving without spoiling surprises.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Create and manage your Christmas wishlist
+- See family members' wishlists
+- Mark gifts as purchased (hidden from the gift owner)
+- Google OAuth and email/password authentication
+- Email whitelist to restrict access to family members only
+
+## Tech Stack
+
+- **Framework**: Next.js 14
+- **Database**: PostgreSQL (Neon)
+- **ORM**: Drizzle
+- **Authentication**: NextAuth v5
+- **Styling**: Tailwind CSS
+
+## Deployment
+
+### 1. Set up the Database
+
+Create a free PostgreSQL database at [Neon](https://neon.tech):
+
+1. Create a new project
+2. Copy the connection string
+
+### 2. Set up Google OAuth (Optional)
+
+If you want Google sign-in:
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project
+3. Enable the Google+ API
+4. Create OAuth credentials (Web application)
+5. Add your domain to authorized origins and redirect URIs
+
+### 3. Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/andylow92/christmass)
+
+### 4. Configure Environment Variables
+
+Add these environment variables in your Vercel project settings:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `DATABASE_URL` | Neon PostgreSQL connection string | `postgresql://user:pass@host/db` |
+| `NEXTAUTH_SECRET` | Random secret for JWT signing | `your-random-secret-here` |
+| `NEXTAUTH_URL` | Your app URL | `https://your-app.vercel.app` |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID | `123...apps.googleusercontent.com` |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | `GOCSPX-...` |
+| `ALLOWED_EMAILS` | Comma-separated list of allowed emails | `mom@gmail.com,dad@gmail.com` |
+
+### 5. Restrict Access to Your Family
+
+Set the `ALLOWED_EMAILS` environment variable with your family members' emails:
+
+```
+ALLOWED_EMAILS=mom@gmail.com,dad@gmail.com,sister@gmail.com,brother@outlook.com
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Only these emails will be able to sign up. Anyone else will see an error message.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+If `ALLOWED_EMAILS` is not set, anyone can sign up (open registration).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 6. Run Database Migrations
 
-## Learn More
+After deploying, run the database migrations:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run db:push
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Or connect to your Neon database and run the SQL schema manually.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Local Development
 
-## Deploy on Vercel
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/andylow92/christmass.git
+   cd christmass
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Create a `.env` file:
+   ```
+   DATABASE_URL=your_neon_connection_string
+   NEXTAUTH_SECRET=your_random_secret
+   NEXTAUTH_URL=http://localhost:3000
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   ALLOWED_EMAILS=your@email.com,family@email.com
+   ```
+
+4. Run database migrations:
+   ```bash
+   npm run db:push
+   ```
+
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000)
+
+## License
+
+MIT
