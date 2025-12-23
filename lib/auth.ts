@@ -5,6 +5,7 @@ import { db } from "./db";
 import { users } from "./db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import { isEmailAllowed } from "./allowed-emails";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -67,6 +68,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           .limit(1);
 
         if (!existingUser) {
+          // Check if email is in the allowed list before creating new user
+          if (!isEmailAllowed(email)) {
+            return false; // Block sign-in for non-whitelisted emails
+          }
+
           // Create new user for Google OAuth
           await db.insert(users).values({
             name: user.name || "Google User",
