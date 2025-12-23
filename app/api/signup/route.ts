@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+import { isEmailAllowed } from '@/lib/allowed-emails';
 
 export async function POST(request: Request) {
   try {
@@ -13,6 +14,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: 'Name, email, and password are required' },
         { status: 400 }
+      );
+    }
+
+    // Check if email is in the allowed list
+    if (!isEmailAllowed(email)) {
+      return NextResponse.json(
+        { error: 'This email is not authorized to sign up. Please contact the family admin.' },
+        { status: 403 }
       );
     }
 
