@@ -3,9 +3,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
 import { users } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { findUserByEmail } from "./db/users";
 import bcrypt from "bcryptjs";
 import { isEmailAllowed } from "./allowed-emails";
+import { normalizeEmail } from "./validation";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -24,15 +25,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        const email = credentials.email as string;
+        const email = normalizeEmail(credentials.email as string);
         const password = credentials.password as string;
 
         // Find user by email
-        const [user] = await db
-          .select()
-          .from(users)
-          .where(eq(users.email, email))
-          .limit(1);
+        const user = await findUserByEmail(email);
 
         if (!user || !user.password) {
           return null;
@@ -57,15 +54,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, account }) {
       // Handle Google OAuth sign in
       if (account?.provider === "google") {
-        const email = user.email;
-        if (!email) return false;
+        if (!user.email) return false;
+        const email = normalizeEmail(user.email);
 
         // Check if user exists
-        const [existingUser] = await db
-          .select()
-          .from(users)
-          .where(eq(users.email, email))
-          .limit(1);
+        const existingUser = await findUserByEmail(email);
 
         if (!existingUser) {
           // Check if email is in the allowed list before creating new user
@@ -75,7 +68,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           // Create new user for Google OAuth
           await db.insert(users).values({
-            name: user.name || "Google User",
+            name: (user.name?.trim() || "Google User").slice(0, 60),
             email: email,
             password: null, // No password for OAuth users
           });
@@ -88,11 +81,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         // For credentials login, sub is already the user ID
         // For OAuth, we need to look up the user
         if (token.email) {
-          const [user] = await db
-            .select()
-            .from(users)
-            .where(eq(users.email, token.email as string))
-            .limit(1);
+          const user = await findUserByEmail(token.email as string);
 
           if (user) {
             session.user.id = user.id.toString();

@@ -1,7 +1,8 @@
 import { auth } from "./lib/auth";
 import { NextResponse } from "next/server";
 
-export default auth((req) => {
+// Auth.js wraps the proxy so req.auth holds the session (Next 16 renamed middleware to proxy)
+export const proxy = auth((req) => {
   const isLoggedIn = !!req.auth;
   const isOnLoginPage = req.nextUrl.pathname.startsWith('/login');
   const isOnSignupPage = req.nextUrl.pathname.startsWith('/signup');
@@ -20,7 +21,7 @@ export default auth((req) => {
   return NextResponse.next();
 });
 
-// Protect all routes except API routes, static files, and images
+// Protect all routes except API routes, static files, images and the app icon
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|icon.svg).*)'],
 };

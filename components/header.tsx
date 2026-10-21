@@ -1,8 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
+import { LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Gift, LogOut, Sparkles } from 'lucide-react';
+import { BrandMark } from '@/components/brand-mark';
+import { InitialsAvatar } from '@/components/initials-avatar';
 
 export function Header() {
   const { data: session } = useSession();
@@ -11,29 +14,37 @@ export function Header() {
     return null;
   }
 
+  const name = session.user.name ?? '';
+  const firstName = name.split(' ')[0];
+
   return (
-    <header className="glass-strong border-b border-white/20 shadow-2xl sticky top-0 z-50 backdrop-blur-xl">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative animate-pulse">
-              <Gift className="h-8 w-8 text-emerald-400 drop-shadow-lg filter drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-              <Sparkles className="h-4 w-4 text-amber-300 absolute -top-1 -right-1 animate-pulse" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">Christmas Wishlist 🎄</h1>
-              <p className="text-sm text-white drop-shadow-md font-medium">
-                Welcome, {session.user.name}! ✨
-              </p>
-            </div>
-          </div>
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-background/80 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
+        <Link
+          href="/"
+          className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          <BrandMark />
+        </Link>
+        <div className="flex items-center gap-2 sm:gap-3">
+          {name && (
+            <span className="flex items-center gap-2">
+              <InitialsAvatar name={name} />
+              <span className="hidden text-sm font-medium text-foreground/90 sm:inline">
+                {firstName}
+              </span>
+            </span>
+          )}
           <Button
+            variant="ghost"
+            size="sm"
+            aria-label="Sign out"
+            title="Sign out"
             onClick={() => signOut({ callbackUrl: '/login' })}
-            variant="outline"
-            className="glass border-white/30 text-white hover:bg-white/20 hover:text-white transition-all duration-300 hover:scale-105 hover:border-white/50"
+            className="h-9 rounded-full px-2.5 text-foreground/80 hover:bg-white/10 hover:text-foreground focus-visible:ring-accent focus-visible:ring-offset-background sm:px-3"
           >
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
+            <LogOut aria-hidden="true" />
+            <span className="hidden sm:inline">Sign out</span>
           </Button>
         </div>
       </div>

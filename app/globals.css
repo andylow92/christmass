@@ -1,247 +1,110 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
+  /* "Cozy evening by the tree": pine night page, cream paper cards */
   :root {
-    /* Darker, cozier Christmas theme colors */
-    --background: 346 30% 95%;  /* Warmer, slightly darker background */
-    --foreground: 346 84% 20%;  /* Deep red */
-    
-    --card: 346 30% 97%;  /* Slightly tinted card background */
-    --card-foreground: 346 84% 20%;
- 
-    --popover: 346 30% 97%;
-    --popover-foreground: 346 84% 20%;
- 
-    /* Rich Christmas red */
-    --primary: 346 84% 37%;  
+    --background: 163 50% 11%;
+    --foreground: 40 65% 95%;
+
+    --card: 40 65% 95%;
+    --card-foreground: 30 27% 13%;
+
+    --popover: 40 65% 95%;
+    --popover-foreground: 30 27% 13%;
+
+    --primary: 350 65% 42%;
     --primary-foreground: 0 0% 100%;
- 
-    /* Deep pine green */
-    --secondary: 151 40% 35%;  
-    --secondary-foreground: 0 0% 100%;
- 
-    --muted: 346 25% 90%;
-    --muted-foreground: 346 40% 40%;
- 
-    /* Warm gold */
-    --accent: 45 80% 50%;  
-    --accent-foreground: 0 0% 100%;
- 
-    --destructive: 0 84.2% 60.2%;
+
+    --secondary: 38 45% 89%;
+    --secondary-foreground: 30 27% 13%;
+
+    --muted: 38 45% 89%;
+    --muted-foreground: 32 15% 36%;
+
+    --accent: 39 75% 56%;
+    --accent-foreground: 30 27% 13%;
+
+    --success: 154 46% 34%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 85% 30%;
+    --warning-soft: 43 88% 88%;
+
+    --destructive: 355 70% 40%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Warmer borders */
-    --border: 346 35% 85%;
-    --input: 346 35% 85%;
-    --ring: 346 84% 37%;
- 
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    /* Darker, richer dark mode */
-    --background: 346 30% 8%;  /* Deeper dark background */
-    --foreground: 0 0% 98%;
- 
-    --card: 346 30% 10%;
-    --card-foreground: 0 0% 98%;
- 
-    --popover: 346 30% 10%;
-    --popover-foreground: 0 0% 98%;
- 
-    /* Brighter Christmas red for dark mode */
-    --primary: 346 84% 45%;  
-    --primary-foreground: 0 0% 100%;
- 
-    /* Brighter green for dark mode */
-    --secondary: 151 40% 40%;  
-    --secondary-foreground: 0 0% 100%;
- 
-    --muted: 346 40% 15%;
-    --muted-foreground: 346 40% 70%;
- 
-    /* Brighter gold for dark mode */
-    --accent: 45 85% 55%;  
-    --accent-foreground: 0 0% 100%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 346 40% 15%;
-    --input: 346 40% 15%;
-    --ring: 346 84% 45%;
+    --border: 36 30% 82%;
+    --input: 36 30% 82%;
+    --ring: 350 65% 42%;
+
+    --radius: 1rem;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
   }
+
+  html {
+    @apply bg-background;
+  }
+
   body {
-    background: linear-gradient(135deg, #065f46 0%, #064e3b 50%, #065f46 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    @apply min-h-dvh bg-background text-foreground;
+    /* Soft gold glow above the fold; scrolls with the page */
+    background-image: radial-gradient(
+      1200px 600px at 50% -10%,
+      hsl(39 75% 56% / 0.16),
+      transparent 60%
+    );
+    background-repeat: no-repeat;
   }
+}
 
-  body::before {
-    content: '❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄ ❄';
-    position: fixed;
-    top: -50%;
-    left: 0;
-    width: 100%;
-    height: 150%;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 20px;
-    line-height: 80px;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    animation: snowfall 15s linear infinite;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-    word-wrap: break-word;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+}
 
-  body::after {
-    content: '';
-    position: fixed;
+@keyframes snow-fall {
+  from {
+    transform: translate3d(0, -10vh, 0);
+  }
+  to {
+    transform: translate3d(0, 105vh, 0);
+  }
+}
+
+@keyframes snow-sway {
+  from {
+    transform: translateX(calc(var(--sway) * -1));
+  }
+  to {
+    transform: translateX(var(--sway));
+  }
+}
+
+@layer components {
+  .snowflake {
+    position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image:
-      radial-gradient(circle, rgba(5, 150, 105, 0.4) 0%, transparent 2%),
-      radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 2%),
-      radial-gradient(circle, rgba(6, 95, 70, 0.5) 0%, transparent 2%),
-      radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, transparent 2%),
-      radial-gradient(circle, rgba(5, 150, 105, 0.3) 0%, transparent 2%);
-    background-size: 4px 4px, 3px 3px, 5px 5px, 3px 3px, 4px 4px;
-    background-position: 0 0, 40px 60px, 80px 20px, 20px 80px, 60px 40px;
-    animation: sparkleMove 20s linear infinite;
-    pointer-events: none;
-    opacity: 0.4;
-    z-index: 1;
-  }
-}
-
-@keyframes snowfall {
-  0% {
-    transform: translateY(0) translateX(0);
-  }
-  100% {
-    transform: translateY(100vh) translateX(100px);
-  }
-}
-
-@keyframes twinkle {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-@keyframes sparkleMove {
-  0% {
-    transform: translateY(0) translateX(0);
-  }
-  100% {
-    transform: translateY(-100vh) translateX(50px);
-  }
-}
-
-/* Glassmorphism utility classes */
-@layer utilities {
-  .glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    animation: snow-fall var(--fall-duration) linear var(--fall-delay) infinite;
+    will-change: transform;
   }
 
-  .glass-strong {
-    background: rgba(6, 95, 70, 0.5);
-    backdrop-filter: blur(25px) saturate(200%);
-    -webkit-backdrop-filter: blur(25px) saturate(200%);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
-  }
-
-  .glass-card {
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(18px) saturate(170%);
-    -webkit-backdrop-filter: blur(18px) saturate(170%);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-  }
-
-  .glass-card:hover {
-    background: rgba(255, 255, 255, 0.24);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4);
-    transform: translateY(-2px);
-  }
-
-  /* Claimed - Someone will buy this (amber/gold tint) */
-  .glass-card-claimed {
-    background: rgba(251, 191, 36, 0.2);
-    backdrop-filter: blur(18px) saturate(170%);
-    -webkit-backdrop-filter: blur(18px) saturate(170%);
-    border: 1px solid rgba(251, 191, 36, 0.4);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3),
-                0 0 20px rgba(251, 191, 36, 0.15);
-    transition: all 0.3s ease;
-  }
-
-  .glass-card-claimed:hover {
-    background: rgba(251, 191, 36, 0.28);
-    border: 1px solid rgba(251, 191, 36, 0.55);
-    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(251, 191, 36, 0.2);
-    transform: translateY(-2px);
-  }
-
-  /* Purchased - Item has been bought (festive red tint) */
-  .glass-card-purchased {
-    background: rgba(220, 38, 38, 0.35);
-    backdrop-filter: blur(18px) saturate(170%);
-    -webkit-backdrop-filter: blur(18px) saturate(170%);
-    border: 1px solid rgba(248, 113, 113, 0.5);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3),
-                0 0 25px rgba(220, 38, 38, 0.25);
-    transition: all 0.3s ease;
-  }
-
-  .glass-card-purchased:hover {
-    background: rgba(220, 38, 38, 0.42);
-    border: 1px solid rgba(248, 113, 113, 0.65);
-    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4),
-                0 0 35px rgba(220, 38, 38, 0.3);
-    transform: translateY(-2px);
-  }
-
-  .festive-glow {
-    box-shadow: 0 0 15px rgba(5, 150, 105, 0.25),
-                0 0 30px rgba(5, 150, 105, 0.15),
-                0 0 45px rgba(5, 150, 105, 0.08);
+  .snowflake > span {
+    display: block;
+    border-radius: 9999px;
+    background: white;
+    animation: snow-sway var(--sway-duration) ease-in-out infinite alternate;
   }
 }
