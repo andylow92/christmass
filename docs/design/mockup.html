@@ -1,0 +1,917 @@
+<!doctype html>
+<!--
+  Design mockup for the Family Wishlist redesign. Static HTML/CSS/JS, not app code.
+  It is the visual target for docs/design-plan.md: match its tokens, type, spacing,
+  components and interactions in the real Next.js app. The floating "Mockup" bar at
+  the bottom is NOT part of the design.
+-->
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Family Wishlist mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ---------- Tokens ---------- */
+:root {
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+
+  --bg: #F7F4EE;
+  --bg-glow-a: #EFE5D1;
+  --bg-glow-b: #E2EDE6;
+  --surface: #FFFFFF;
+  --surface-2: #F3EEE5;
+  --surface-3: #EAE3D7;
+  --ink: #1C1B19;
+  --ink-2: #5C5850;
+  --ink-3: #77726A;
+  --line: #E7E1D6;
+  --line-strong: #D8CFC0;
+
+  --pine: #1D5A44;
+  --pine-hover: #174A38;
+  --pine-ink: #FFFFFF;
+  --pine-soft: #E2EEE7;
+  --pine-text: #1D5A44;
+  --gold-soft: #F7EDD8;
+  --gold-text: #7A5410;
+  --gold-line: #EAD7AE;
+  --berry: #B42840;
+  --berry-soft: #FBE7EA;
+  --berry-text: #9A1F35;
+
+  --hero-1: #0F3B2E;
+  --hero-2: #17533F;
+  --hero-ink: #F6F1E7;
+  --hero-ink-2: #C9D8CF;
+
+  --shadow-sm: 0 1px 2px rgba(28, 27, 25, .05);
+  --shadow: 0 1px 2px rgba(28, 27, 25, .05), 0 12px 32px -14px rgba(28, 27, 25, .16);
+  --shadow-lg: 0 2px 6px rgba(28, 27, 25, .06), 0 28px 56px -24px rgba(28, 27, 25, .28);
+  --ring: 0 0 0 3px rgba(29, 90, 68, .28);
+
+  --radius-lg: 28px;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+
+  /* avatar / tile tones: background, text */
+  --t0-bg: #E2EEE7; --t0-fg: #1D5A44;
+  --t1-bg: #FBE7EA; --t1-fg: #9A1F35;
+  --t2-bg: #F7EDD8; --t2-fg: #7A5410;
+  --t3-bg: #ECEAF8; --t3-fg: #463F98;
+  --t4-bg: #E4EDF6; --t4-fg: #23507C;
+  --t5-bg: #F3E8DF; --t5-fg: #6E4027;
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --bg: #0C1512;
+  --bg-glow-a: rgba(201, 154, 59, .10);
+  --bg-glow-b: rgba(79, 181, 138, .09);
+  --surface: #131F1B;
+  --surface-2: #1A2924;
+  --surface-3: #22342D;
+  --ink: #F1EDE5;
+  --ink-2: #AEB8B2;
+  --ink-3: #849089;
+  --line: #22322C;
+  --line-strong: #2F433A;
+
+  --pine: #6CC79D;
+  --pine-hover: #84D3AE;
+  --pine-ink: #0C1512;
+  --pine-soft: rgba(108, 199, 157, .14);
+  --pine-text: #8FD6B4;
+  --gold-soft: rgba(226, 182, 90, .13);
+  --gold-text: #EBC77C;
+  --gold-line: rgba(226, 182, 90, .30);
+  --berry: #F0778B;
+  --berry-soft: rgba(240, 119, 139, .13);
+  --berry-text: #F49AAA;
+
+  --hero-1: #134034;
+  --hero-2: #0D2A21;
+  --hero-ink: #F6F1E7;
+  --hero-ink-2: #B9CCC2;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 14px 34px -16px rgba(0, 0, 0, .65);
+  --shadow-lg: 0 2px 6px rgba(0, 0, 0, .4), 0 28px 56px -24px rgba(0, 0, 0, .75);
+  --ring: 0 0 0 3px rgba(108, 199, 157, .32);
+
+  --t0-bg: rgba(108, 199, 157, .16); --t0-fg: #8FD6B4;
+  --t1-bg: rgba(240, 119, 139, .16); --t1-fg: #F49AAA;
+  --t2-bg: rgba(226, 182, 90, .16);  --t2-fg: #EBC77C;
+  --t3-bg: rgba(150, 140, 240, .16); --t3-fg: #B9B2F5;
+  --t4-bg: rgba(110, 170, 230, .16); --t4-fg: #A3C8EE;
+  --t5-bg: rgba(210, 150, 110, .16); --t5-fg: #E2B79A;
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 520px at 88% -12%, var(--bg-glow-a), transparent 62%),
+    radial-gradient(900px 460px at -12% -6%, var(--bg-glow-b), transparent 58%),
+    var(--bg);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .3s var(--ease), color .3s var(--ease);
+}
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+svg { display: block; flex-shrink: 0; }
+.wrap { width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+@media (min-width: 640px) { .wrap { padding: 0 28px; } }
+[hidden] { display: none !important; }
+[data-icon] { display: inline-flex; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: none; box-shadow: var(--ring); }
+
+/* ---------- Buttons, pills, inputs ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid transparent;
+  font-weight: 600; font-size: 15px; white-space: nowrap;
+  transition: background-color .2s var(--ease), border-color .2s var(--ease), transform .15s var(--ease), box-shadow .2s var(--ease);
+}
+.btn svg { width: 18px; height: 18px; }
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--pine); color: var(--pine-ink); box-shadow: 0 1px 0 rgba(255,255,255,.12) inset, 0 6px 16px -8px rgba(29, 90, 68, .6); }
+.btn-primary:hover { background: var(--pine-hover); }
+.btn-soft { background: var(--surface-2); color: var(--ink); border-color: var(--line); }
+.btn-soft:hover { background: var(--surface-3); }
+.btn-ghost { background: transparent; color: var(--ink-2); }
+.btn-ghost:hover { background: var(--surface-2); color: var(--ink); }
+.btn-danger { background: var(--berry); color: #fff; }
+[data-theme="dark"] .btn-danger { color: #1A0B0E; }
+.btn-sm { height: 38px; padding: 0 14px; font-size: 14px; }
+.btn-sm svg { width: 16px; height: 16px; }
+.btn-block { width: 100%; }
+
+.icon-btn {
+  display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 999px;
+  border: 1px solid transparent; background: transparent; color: var(--ink-2);
+  transition: background-color .2s var(--ease), color .2s var(--ease);
+}
+.icon-btn svg { width: 18px; height: 18px; }
+.icon-btn:hover { background: var(--surface-2); color: var(--ink); }
+.icon-btn.danger:hover { background: var(--berry-soft); color: var(--berry-text); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px;
+  border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap;
+  background: var(--surface-2); color: var(--ink-2);
+}
+.pill svg { width: 14px; height: 14px; }
+.pill-gold { background: var(--gold-soft); color: var(--gold-text); }
+.pill-pine { background: var(--pine-soft); color: var(--pine-text); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px;
+  border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--line); text-decoration: none;
+  max-width: 100%;
+}
+.chip svg { width: 14px; height: 14px; }
+.chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+a.chip:hover { border-color: var(--line-strong); color: var(--ink); }
+
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 600; color: var(--ink); }
+.input, .textarea {
+  width: 100%; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: var(--radius-sm); padding: 11px 14px; font-size: 16px; line-height: 1.4;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.input::placeholder, .textarea::placeholder { color: var(--ink-3); }
+.input:focus, .textarea:focus { outline: none; border-color: var(--pine); box-shadow: var(--ring); }
+.textarea { min-height: 84px; resize: vertical; }
+
+.avatar {
+  display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; letter-spacing: .02em;
+}
+.tone-0 { background: var(--t0-bg); color: var(--t0-fg); }
+.tone-1 { background: var(--t1-bg); color: var(--t1-fg); }
+.tone-2 { background: var(--t2-bg); color: var(--t2-fg); }
+.tone-3 { background: var(--t3-bg); color: var(--t3-fg); }
+.tone-4 { background: var(--t4-bg); color: var(--t4-fg); }
+.tone-5 { background: var(--t5-bg); color: var(--t5-fg); }
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+}
+.topbar-in { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand-mark {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px;
+  background: linear-gradient(145deg, var(--hero-2), var(--hero-1)); color: #F1D58E;
+  box-shadow: 0 6px 14px -6px rgba(15, 59, 46, .6);
+}
+.brand-mark svg { width: 18px; height: 18px; }
+.brand-name { font-family: var(--font-display); font-size: 24px; line-height: 1; letter-spacing: -.01em; }
+.brand-name em { font-style: italic; color: var(--pine-text); }
+.top-actions { display: flex; align-items: center; gap: 6px; }
+.me { display: flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; border-radius: 999px; }
+.me-name { font-weight: 600; font-size: 14px; }
+@media (max-width: 560px) { .me-name, .signout-label { display: none; } .signout { width: 40px; padding: 0; } }
+
+/* ---------- Hero ---------- */
+main { padding-bottom: 120px; }
+.hero {
+  position: relative; overflow: hidden; margin-top: 24px; border-radius: var(--radius-lg);
+  padding: 40px 28px; color: var(--hero-ink);
+  background:
+    radial-gradient(600px 300px at 85% 0%, rgba(226, 182, 90, .28), transparent 60%),
+    radial-gradient(500px 260px at 0% 100%, rgba(108, 199, 157, .22), transparent 60%),
+    linear-gradient(150deg, var(--hero-2), var(--hero-1));
+  box-shadow: var(--shadow-lg);
+  isolation: isolate;
+}
+@media (min-width: 760px) { .hero { padding: 56px 48px; margin-top: 32px; } }
+.hero-content { position: relative; z-index: 2; max-width: 560px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #F1D58E;
+}
+.eyebrow svg { width: 15px; height: 15px; }
+.hero h1 {
+  margin: 0; font-family: var(--font-display); font-weight: 400; letter-spacing: -.015em;
+  font-size: clamp(40px, 7vw, 64px); line-height: 1.02;
+}
+.hero h1 em { font-style: italic; color: #F1D58E; }
+.hero-sub { margin: 16px 0 0; font-size: 17px; color: var(--hero-ink-2); }
+.hero-sub b { color: var(--hero-ink); font-weight: 600; }
+.hero-art { position: absolute; right: 28px; top: 0; width: 240px; z-index: 1; pointer-events: none; }
+.hero-art svg { width: 100%; height: auto; }
+@media (max-width: 760px) { .hero-art { width: 170px; right: 12px; } }
+@media (max-width: 560px) { .hero-art { width: 112px; right: 10px; } }
+.orn { transform-box: fill-box; transform-origin: 50% 0; animation: sway 6s ease-in-out infinite; }
+.orn:nth-of-type(2) { animation-duration: 7.5s; animation-delay: -2s; }
+.orn:nth-of-type(3) { animation-duration: 5.5s; animation-delay: -1s; }
+@keyframes sway { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+.snow { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.snow i {
+  position: absolute; top: -10px; border-radius: 999px; background: #fff;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0% { transform: translate3d(0, -10px, 0); }
+  100% { transform: translate3d(var(--drift, 20px), 420px, 0); }
+}
+
+/* ---------- Family picker ---------- */
+.family-wrap { position: relative; margin-top: 28px; }
+.family {
+  display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+  margin: 0 -20px; padding: 4px 20px 10px; scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 44px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 44px), transparent);
+}
+@media (min-width: 640px) and (max-width: 759px) { .family { margin: 0 -28px; padding: 4px 28px 10px; } }
+.family::-webkit-scrollbar { display: none; }
+@media (min-width: 760px) { .family { flex-wrap: wrap; overflow: visible; margin: 0; padding: 4px 2px 10px; -webkit-mask-image: none; mask-image: none; } }
+.person {
+  scroll-snap-align: start; flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 16px 0 8px;
+  border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  font-weight: 600; font-size: 15px; box-shadow: var(--shadow-sm);
+  transition: background-color .2s var(--ease), border-color .2s var(--ease), transform .15s var(--ease), color .2s var(--ease);
+}
+.person:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+.person .count {
+  min-width: 22px; height: 22px; padding: 0 7px; border-radius: 999px; display: inline-grid; place-items: center;
+  font-size: 12px; font-weight: 700; background: var(--surface-2); color: var(--ink-2);
+}
+.person[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.person[aria-pressed="true"] .avatar { background: var(--bg); color: var(--ink); }
+.person[aria-pressed="true"] .count { background: color-mix(in srgb, var(--bg) 18%, transparent); color: var(--bg); }
+
+/* ---------- List header ---------- */
+.list-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin: 36px 0 18px; flex-wrap: wrap; }
+.list-head h2 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 4.4vw, 40px); line-height: 1.05; letter-spacing: -.01em; }
+.hint { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; color: var(--ink-2); font-size: 15px; }
+.hint svg { width: 16px; height: 16px; color: var(--pine-text); }
+.list-count { color: var(--ink-3); font-size: 14px; font-weight: 500; }
+
+/* ---------- Composer ---------- */
+.composer {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 10px; margin-bottom: 20px;
+  transition: box-shadow .25s var(--ease), border-color .25s var(--ease);
+}
+.composer:focus-within { border-color: color-mix(in srgb, var(--pine) 45%, var(--line)); }
+.composer-row { display: flex; align-items: center; gap: 10px; }
+.composer-row .tile { margin-left: 2px; }
+.composer-input {
+  flex: 1; min-width: 0; height: 48px; border: 0; background: transparent; font-size: 17px; color: var(--ink);
+}
+.composer-input:focus { outline: none; }
+.composer-input::placeholder { color: var(--ink-3); }
+.composer-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s var(--ease); }
+.composer.is-open .composer-more { grid-template-rows: 1fr; }
+.composer-more > div { overflow: hidden; }
+.composer-fields { display: grid; gap: 12px; padding: 12px 6px 6px; }
+@media (min-width: 640px) { .composer-fields { grid-template-columns: 1fr 200px; } }
+.composer-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 0 6px 6px; }
+@media (max-width: 520px) { .composer-row .btn-label { display: none; } .composer-row .btn { width: 44px; padding: 0; } }
+
+/* ---------- Gift cards ---------- */
+.grid { display: grid; gap: 16px; }
+@media (min-width: 760px) { .grid { grid-template-columns: 1fr 1fr; gap: 20px; } }
+.gift {
+  position: relative; display: flex; flex-direction: column; gap: 16px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 20px; box-shadow: var(--shadow);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease), opacity .25s var(--ease);
+  animation: rise .5s var(--ease) both;
+}
+.gift:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.gift-top { display: flex; gap: 14px; align-items: flex-start; }
+.tile { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0; }
+.tile svg { width: 20px; height: 20px; }
+.gift-main { min-width: 0; flex: 1; }
+.gift h3 { margin: 2px 0 0; font-size: 18px; line-height: 1.3; font-weight: 600; letter-spacing: -.005em; overflow-wrap: anywhere; }
+.gift .desc { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; overflow-wrap: anywhere; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.gift-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  padding-top: 14px; border-top: 1px dashed var(--line); margin-top: auto;
+}
+.gift-actions { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+.added { color: var(--ink-3); font-size: 13px; }
+.gift.is-claimed { border-color: var(--gold-line); }
+.gift.is-bought { background: color-mix(in srgb, var(--surface) 70%, var(--bg)); box-shadow: var(--shadow-sm); }
+.gift.is-bought h3 { color: var(--ink-2); }
+.gift.is-bought .desc, .gift.is-bought .meta { opacity: .75; }
+.gift form { display: grid; gap: 12px; }
+.gift .form-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* Empty + skeleton */
+.empty {
+  grid-column: 1 / -1; text-align: center; padding: 48px 24px; border-radius: var(--radius);
+  border: 1.5px dashed var(--line-strong); background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+.empty svg.art { width: 120px; height: auto; margin: 0 auto 16px; }
+.empty h3 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 28px; }
+.empty p { margin: 6px auto 0; max-width: 360px; color: var(--ink-2); }
+
+/* Sparkle burst on claim */
+.burst { position: absolute; pointer-events: none; z-index: 5; }
+.burst i {
+  position: absolute; width: 6px; height: 6px; border-radius: 2px; left: -3px; top: -3px;
+  animation: burst .7s var(--ease) forwards;
+}
+@keyframes burst {
+  0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) rotate(160deg) scale(.4); opacity: 0; }
+}
+
+/* Toast */
+.toasts { position: fixed; z-index: 50; left: 50%; bottom: 84px; transform: translateX(-50%); display: grid; gap: 8px; width: min(420px, calc(100% - 32px)); }
+@media (min-width: 760px) { .toasts { left: auto; right: 24px; bottom: 24px; transform: none; } }
+.toast {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px 12px 12px; border-radius: 16px;
+  background: var(--ink); color: var(--bg); box-shadow: var(--shadow-lg); font-size: 14px;
+  animation: toast-in .35s var(--ease) both;
+}
+.toast .tile { width: 34px; height: 34px; border-radius: 10px; background: color-mix(in srgb, var(--bg) 14%, transparent); color: #F1D58E; }
+.toast .tile svg { width: 16px; height: 16px; }
+.toast.out { animation: toast-out .25s var(--ease) forwards; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(10px) scale(.98); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(6px); } }
+
+/* Dialog */
+dialog.confirm {
+  border: 1px solid var(--line); border-radius: 24px; padding: 24px; width: min(420px, calc(100% - 32px));
+  background: var(--surface); color: var(--ink); box-shadow: var(--shadow-lg);
+}
+dialog.confirm::backdrop { background: rgba(12, 21, 18, .45); backdrop-filter: blur(4px); }
+dialog.confirm[open] { animation: toast-in .25s var(--ease) both; }
+dialog.confirm h3 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 28px; line-height: 1.15; }
+dialog.confirm p { margin: 8px 0 20px; color: var(--ink-2); }
+dialog.confirm .row { display: flex; justify-content: flex-end; gap: 8px; }
+
+.footer { margin-top: 56px; text-align: center; color: var(--ink-3); font-size: 13px; }
+
+/* ---------- Auth (sign in) ---------- */
+.auth { min-height: 100dvh; display: grid; }
+@media (min-width: 960px) { .auth { grid-template-columns: 1.05fr 1fr; } }
+.auth-art {
+  position: relative; overflow: hidden; color: var(--hero-ink); padding: 28px 24px 36px;
+  background:
+    radial-gradient(700px 360px at 90% 0%, rgba(226, 182, 90, .30), transparent 60%),
+    radial-gradient(600px 320px at 0% 100%, rgba(108, 199, 157, .22), transparent 60%),
+    linear-gradient(155deg, #17533F, #0B2E23);
+  isolation: isolate;
+}
+@media (min-width: 960px) { .auth-art { padding: 40px 56px; display: flex; flex-direction: column; justify-content: space-between; } }
+.auth-art .brand-name { color: var(--hero-ink); }
+.auth-art .brand-name em { color: #F1D58E; }
+.auth-headline { position: relative; z-index: 2; margin-top: 36px; max-width: 520px; }
+.auth-headline h1 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 6.5vw, 76px); line-height: .98; letter-spacing: -.02em; }
+.auth-headline h1 em { color: #F1D58E; }
+.auth-headline p { margin: 16px 0 0; font-size: 17px; color: var(--hero-ink-2); max-width: 420px; }
+.float-cards { position: relative; z-index: 2; display: none; height: 230px; margin-top: 40px; }
+@media (min-width: 960px) { .float-cards { display: block; } }
+.fcard {
+  position: absolute; width: 300px; padding: 16px; border-radius: 18px; color: var(--hero-ink);
+  background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .16);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, .5);
+}
+.fcard b { display: block; font-size: 16px; }
+.fcard small { display: block; color: var(--hero-ink-2); margin-top: 2px; }
+.fcard .pill { margin-top: 12px; background: rgba(241, 213, 142, .16); color: #F1D58E; }
+.fcard:nth-child(1) { left: 0; top: 10px; transform: rotate(-4deg); }
+.fcard:nth-child(2) { left: 210px; top: 96px; transform: rotate(3deg); }
+.auth-main { display: grid; place-items: center; padding: 32px 20px 120px; }
+@media (min-width: 960px) { .auth-main { padding: 48px; } }
+.auth-card { width: 100%; max-width: 400px; }
+.auth-card h2 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.05; }
+.auth-card .lede { margin: 8px 0 28px; color: var(--ink-2); }
+.divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--ink-3); font-size: 13px; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.auth-form { display: grid; gap: 16px; }
+.auth-switch { margin-top: 24px; text-align: center; color: var(--ink-2); font-size: 15px; }
+.auth-switch a { color: var(--pine-text); font-weight: 600; text-decoration: none; }
+.auth-theme { position: absolute; top: 16px; right: 16px; z-index: 5; }
+
+/* ---------- Mockup controls (not part of the design) ---------- */
+.mockbar {
+  position: fixed; z-index: 60; left: 50%; bottom: 16px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 4px; padding: 5px; border-radius: 999px;
+  background: #1C1B19; color: #F7F4EE; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, .5);
+  font: 500 13px/1 system-ui, sans-serif; max-width: calc(100% - 24px); overflow-x: auto;
+}
+.mockbar span { padding: 0 10px 0 12px; opacity: .6; white-space: nowrap; }
+.mockbar button { border: 0; background: transparent; color: inherit; padding: 9px 12px; border-radius: 999px; white-space: nowrap; font: inherit; }
+.mockbar button[aria-pressed="true"] { background: #F7F4EE; color: #1C1B19; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .snow { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="view-app">
+  <header class="topbar">
+    <div class="wrap topbar-in">
+      <a class="brand" href="#" aria-label="Family Wishlist home">
+        <span class="brand-mark" data-icon="gift"></span>
+        <span class="brand-name">Family <em>Wishlist</em></span>
+      </a>
+      <div class="top-actions">
+        <button class="icon-btn theme-toggle" aria-label="Switch to dark mode"></button>
+        <div class="me"><span class="avatar tone-0">A</span><span class="me-name">Andy</span></div>
+        <button class="btn btn-ghost btn-sm signout" aria-label="Sign out"><span data-icon="logout"></span><span class="signout-label">Sign out</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" aria-labelledby="greeting">
+      <div class="snow" aria-hidden="true"></div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 220 170" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="g-gold" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#FBE6AE"/><stop offset=".55" stop-color="#D9A441"/><stop offset="1" stop-color="#8E6114"/></radialGradient>
+            <radialGradient id="g-berry" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#F7A3B0"/><stop offset=".55" stop-color="#C23149"/><stop offset="1" stop-color="#701225"/></radialGradient>
+            <radialGradient id="g-cream" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#ECE5D6"/><stop offset="1" stop-color="#ADA188"/></radialGradient>
+          </defs>
+          <g class="orn">
+            <line x1="52" y1="0" x2="52" y2="74" stroke="rgba(246,241,231,.5)" stroke-width="1.2"/>
+            <rect x="46" y="74" width="12" height="8" rx="2" fill="#D8C48C"/>
+            <circle cx="52" cy="106" r="25" fill="url(#g-berry)"/>
+          </g>
+          <g class="orn">
+            <line x1="122" y1="0" x2="122" y2="34" stroke="rgba(246,241,231,.5)" stroke-width="1.2"/>
+            <rect x="115" y="34" width="14" height="9" rx="2" fill="#D8C48C"/>
+            <circle cx="122" cy="82" r="40" fill="url(#g-gold)"/>
+            <path d="M84 76 Q122 90 160 76" stroke="rgba(255,255,255,.45)" stroke-width="3" fill="none"/>
+            <path d="M86 92 Q122 104 158 92" stroke="rgba(255,255,255,.25)" stroke-width="2" fill="none"/>
+          </g>
+          <g class="orn">
+            <line x1="188" y1="0" x2="188" y2="94" stroke="rgba(246,241,231,.5)" stroke-width="1.2"/>
+            <rect x="183" y="94" width="10" height="7" rx="2" fill="#D8C48C"/>
+            <circle cx="188" cy="120" r="19" fill="url(#g-cream)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="hero-content">
+        <p class="eyebrow"><span data-icon="sparkles"></span>Christmas <span id="year"></span></p>
+        <h1 id="greeting"></h1>
+        <p class="hero-sub" id="hero-sub"></p>
+      </div>
+    </section>
+
+    <div class="family-wrap">
+      <div class="family" id="family" role="group" aria-label="Choose whose wishlist to see"></div>
+    </div>
+
+    <div class="list-head">
+      <div>
+        <h2 id="list-title"></h2>
+        <p class="hint" id="list-hint"></p>
+      </div>
+      <span class="list-count" id="list-count"></span>
+    </div>
+
+    <div id="composer-slot"></div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+
+    <p class="footer">Made with care for the family · <span id="year2"></span></p>
+  </main>
+</div>
+
+<div id="view-login" hidden>
+  <div class="auth">
+    <aside class="auth-art">
+      <div class="snow" aria-hidden="true"></div>
+      <a class="brand" href="#" style="position:relative; z-index:2">
+        <span class="brand-mark" data-icon="gift" style="background: rgba(255,255,255,.1)"></span>
+        <span class="brand-name">Family <em>Wishlist</em></span>
+      </a>
+      <div class="auth-headline">
+        <h1>Wishes,<br><em>shared.</em></h1>
+        <p>One list for the whole family. See what everyone's hoping for, quietly claim a gift, and never buy the same socks twice.</p>
+      </div>
+      <div class="float-cards" aria-hidden="true">
+        <div class="fcard"><b>Cozy wool blanket</b><small>Mom · $40–60</small><span class="pill"><span data-icon="bag"></span>Someone's on it</span></div>
+        <div class="fcard"><b>Noise-cancelling headphones</b><small>Andy · $250–350</small><span class="pill"><span data-icon="check"></span>Bought</span></div>
+      </div>
+    </aside>
+    <main class="auth-main" style="position:relative">
+      <button class="icon-btn theme-toggle auth-theme" aria-label="Switch to dark mode"></button>
+      <div class="auth-card">
+        <h2>Welcome back</h2>
+        <p class="lede">Sign in to see what everyone's wishing for.</p>
+        <button class="btn btn-soft btn-block" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Continue with Google
+        </button>
+        <div class="divider">or sign in with email</div>
+        <form class="auth-form" onsubmit="return false">
+          <div class="field"><label for="email">Email</label><input class="input" id="email" type="email" placeholder="you@family.com" autocomplete="email"></div>
+          <div class="field"><label for="password">Password</label><input class="input" id="password" type="password" placeholder="Your password" autocomplete="current-password"></div>
+          <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+        <p class="auth-switch">New here? <a href="#">Create an account</a></p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<dialog class="confirm" id="confirm">
+  <h3 id="confirm-title">Remove this wish?</h3>
+  <p>It will disappear from your list for everyone.</p>
+  <div class="row">
+    <button class="btn btn-ghost" value="cancel" id="confirm-cancel">Keep it</button>
+    <button class="btn btn-danger" id="confirm-ok">Remove</button>
+  </div>
+</dialog>
+
+<nav class="mockbar" aria-label="Mockup views (not part of the design)">
+  <span>Mockup</span>
+  <button data-view="me" aria-pressed="true">My list</button>
+  <button data-view="2">Mom's list</button>
+  <button data-view="4">Empty list</button>
+  <button data-view="login">Sign in</button>
+</nav>
+
+<script>
+const ICONS = {
+  gift: '<polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+  plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+  pencil: '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>',
+  trash: '<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+  moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+  link: '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+  tag: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/>',
+  sparkles: '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/>',
+  bag: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+  eyeoff: '<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/>',
+  heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>'
+};
+const icon = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const tone = (s) => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0; return 'tone-' + (h % 6); };
+const initials = (n) => n.split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+
+const ME = 1;
+const users = [
+  { id: 1, name: 'Andy' }, { id: 2, name: 'Mom' }, { id: 3, name: 'Dad' },
+  { id: 4, name: 'Sofia' }, { id: 5, name: 'Grandma Rose' },
+];
+let nextId = 100;
+let gifts = [
+  { id: 1, userId: 1, item: 'Noise-cancelling headphones', description: 'Over-ear, for the commute. Sony or Bose are both great. https://www.sony.com/en/headphones', priceRange: '$250–350', status: 'will_buy', added: 'Oct 12' },
+  { id: 2, userId: 1, item: "A really good chef's knife", description: '8-inch, Japanese style if possible.', priceRange: '$80–120', status: 'pending', added: 'Oct 14' },
+  { id: 3, userId: 1, item: 'Concert tickets', description: 'Anything at the Fillmore in January. Surprise me!', priceRange: '', status: 'bought', added: 'Oct 18' },
+  { id: 4, userId: 2, item: 'Cozy wool blanket', description: 'Something warm for the couch, in green or cream. https://www.etsy.com/listing/wool-throw-blanket', priceRange: '$40–60', status: 'pending' },
+  { id: 5, userId: 2, item: 'Pasta maker', description: 'The hand-crank kind, so we can make ravioli together.', priceRange: '$30–50', status: 'will_buy' },
+  { id: 6, userId: 2, item: 'Gardening gloves', description: '', priceRange: '$15', status: 'bought' },
+  { id: 7, userId: 2, item: 'Silk scarf', description: 'Blue tones. Nothing too bright.', priceRange: '$50', status: 'pending' },
+  { id: 8, userId: 3, item: 'Bluetooth speaker for the garage', description: 'Loud enough to hear over the saw. https://www.jbl.com/bluetooth-speakers', priceRange: '$60–100', status: 'pending' },
+  { id: 9, userId: 3, item: 'Grill brush', description: '', priceRange: '$20', status: 'will_buy' },
+  { id: 10, userId: 5, item: 'Large-print crossword book', description: 'The New York Times ones are her favourite.', priceRange: '$15', status: 'pending' },
+  { id: 11, userId: 5, item: 'Framed family photo', description: 'From the summer at the lake.', priceRange: '', status: 'pending' },
+];
+let selected = ME;
+let editing = null;
+let pendingDelete = null;
+
+const ORDER = { pending: 0, will_buy: 1, bought: 2 };
+const firstName = (u) => u.name.split(' ')[0];
+const nameOf = (id) => users.find((u) => u.id === id).name;
+
+function splitLinks(text) {
+  const urls = [];
+  const rest = (text || '').replace(/https?:\/\/[^\s]+/g, (u) => { urls.push(u); return ''; }).replace(/\s{2,}/g, ' ').trim();
+  return { rest, urls };
+}
+function host(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } }
+
+function daysToChristmas() {
+  const now = new Date();
+  let xmas = new Date(now.getFullYear(), 11, 25);
+  if (now > new Date(now.getFullYear(), 11, 25, 23, 59)) xmas = new Date(now.getFullYear() + 1, 11, 25);
+  return Math.ceil((xmas - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 864e5);
+}
+
+function renderHero() {
+  const h = new Date().getHours();
+  const part = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
+  document.getElementById('greeting').innerHTML = `Good ${part}, <em>${esc(nameOf(ME))}</em>`;
+  const d = daysToChristmas();
+  const lead = d === 0 ? '<b>Merry Christmas!</b>' : `<b>${d} ${d === 1 ? 'sleep' : 'sleeps'}</b> until Christmas`;
+  document.getElementById('hero-sub').innerHTML = `${lead} · ${gifts.length} wishes across the family`;
+}
+
+function renderFamily() {
+  const ordered = [users.find((u) => u.id === ME), ...users.filter((u) => u.id !== ME)];
+  document.getElementById('family').innerHTML = ordered.map((u) => {
+    const count = gifts.filter((g) => g.userId === u.id).length;
+    const label = u.id === ME ? 'You' : esc(u.name);
+    return `<button class="person" data-user="${u.id}" aria-pressed="${u.id === selected}">
+      <span class="avatar ${tone(u.name)}">${esc(initials(u.name))}</span>${label}<span class="count" aria-label="${count} wishes">${count}</span>
+    </button>`;
+  }).join('');
+}
+
+function giftCard(g, own) {
+  if (own && editing === g.id) {
+    return `<article class="gift" data-id="${g.id}">
+      <form data-form="edit">
+        <div class="field"><label for="e-item">Gift</label><input class="input" id="e-item" name="item" value="${esc(g.item)}" maxlength="200" required></div>
+        <div class="field"><label for="e-desc">Details or a link</label><textarea class="textarea" id="e-desc" name="description">${esc(g.description)}</textarea></div>
+        <div class="field"><label for="e-price">Price range</label><input class="input" id="e-price" name="priceRange" value="${esc(g.priceRange)}" maxlength="50"></div>
+        <div class="form-actions"><button type="button" class="btn btn-ghost btn-sm" data-act="cancel-edit">Cancel</button><button type="submit" class="btn btn-primary btn-sm">${icon('check')}Save</button></div>
+      </form>
+    </article>`;
+  }
+  const { rest, urls } = splitLinks(g.description);
+  const meta = [
+    ...urls.map((u) => `<a class="chip" href="${esc(u)}" title="${esc(u)}" target="_blank" rel="noopener noreferrer">${icon('link')}<span>${esc(host(u))}</span></a>`),
+    g.priceRange ? `<span class="chip">${icon('tag')}<span>${esc(g.priceRange)}</span></span>` : '',
+  ].join('');
+  const st = own ? 'pending' : g.status;
+  const cls = st === 'will_buy' ? 'is-claimed' : st === 'bought' ? 'is-bought' : '';
+  const tileIcon = st === 'bought' ? icon('check') : icon('gift');
+  const tileTone = st === 'bought' ? 'tone-0' : st === 'will_buy' ? 'tone-2' : tone(g.item);
+  let foot;
+  if (own) {
+    foot = `<span class="added">Added ${esc(g.added || 'today')}</span>
+      <div class="gift-actions">
+        <button class="icon-btn" data-act="edit" aria-label="Edit ${esc(g.item)}" title="Edit">${icon('pencil')}</button>
+        <button class="icon-btn danger" data-act="delete" aria-label="Remove ${esc(g.item)}" title="Remove">${icon('trash')}</button>
+      </div>`;
+  } else if (st === 'pending') {
+    foot = `<span class="pill">Available</span>
+      <div class="gift-actions"><button class="btn btn-primary btn-sm" data-act="claim">${icon('gift')}I'll get this</button></div>`;
+  } else if (st === 'will_buy') {
+    foot = `<span class="pill pill-gold">${icon('bag')}Someone's on it</span>
+      <div class="gift-actions">
+        <button class="btn btn-soft btn-sm" data-act="bought">${icon('check')}Mark as bought</button>
+        <button class="icon-btn" data-act="undo" aria-label="Undo claim" title="Undo">${icon('undo')}</button>
+      </div>`;
+  } else {
+    foot = `<span class="pill pill-pine">${icon('check')}Bought</span>
+      <div class="gift-actions"><button class="btn btn-ghost btn-sm" data-act="undo">${icon('undo')}Undo</button></div>`;
+  }
+  return `<article class="gift ${cls}" data-id="${g.id}">
+    <div class="gift-top">
+      <span class="tile ${tileTone}">${tileIcon}</span>
+      <div class="gift-main">
+        <h3>${esc(g.item)}</h3>
+        ${rest ? `<p class="desc">${esc(rest)}</p>` : ''}
+        ${meta ? `<div class="meta">${meta}</div>` : ''}
+      </div>
+    </div>
+    <footer class="gift-foot">${foot}</footer>
+  </article>`;
+}
+
+function renderList() {
+  const own = selected === ME;
+  const user = users.find((u) => u.id === selected);
+  let list = gifts.filter((g) => g.userId === selected);
+  if (!own) list = list.slice().sort((a, b) => ORDER[a.status] - ORDER[b.status]);
+
+  document.getElementById('list-title').textContent = own ? 'Your wishlist' : `${firstName(user)}'s wishlist`;
+  document.getElementById('list-hint').innerHTML = own
+    ? `${icon('eyeoff')}Claims are hidden from you. No spoilers.`
+    : `${icon('sparkles')}Claim a gift so nobody doubles up. ${esc(firstName(user))} won't see it.`;
+  document.getElementById('list-count').textContent = `${list.length} ${list.length === 1 ? 'wish' : 'wishes'}`;
+
+  document.getElementById('composer-slot').innerHTML = own ? `
+    <form class="composer" id="composer" data-form="add">
+      <div class="composer-row">
+        <span class="tile tone-2">${icon('plus')}</span>
+        <label class="visually-hidden" for="c-item">What would you like?</label>
+        <input class="composer-input" id="c-item" name="item" placeholder="Add something you'd love…" maxlength="200" autocomplete="off">
+        <button class="btn btn-primary" type="submit">${icon('plus')}<span class="btn-label">Add wish</span></button>
+      </div>
+      <div class="composer-more"><div>
+        <div class="composer-fields">
+          <div class="field"><label for="c-desc">Details or a link <span style="color:var(--ink-3);font-weight:500">(optional)</span></label><textarea class="textarea" id="c-desc" name="description" placeholder="Size, colour, where to find it…"></textarea></div>
+          <div class="field"><label for="c-price">Price range</label><input class="input" id="c-price" name="priceRange" placeholder="$20–30" maxlength="50"></div>
+        </div>
+      </div></div>
+    </form>` : '';
+
+  const grid = document.getElementById('grid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty">
+      <svg class="art" viewBox="0 0 120 96" fill="none" aria-hidden="true">
+        <rect x="18" y="38" width="84" height="52" rx="10" fill="var(--surface-2)" stroke="var(--line-strong)" stroke-width="2"/>
+        <rect x="12" y="26" width="96" height="18" rx="7" fill="var(--surface)" stroke="var(--line-strong)" stroke-width="2"/>
+        <rect x="54" y="26" width="12" height="64" fill="var(--t1-bg)"/>
+        <path d="M60 26c-6-14-22-18-24-8-2 9 14 9 24 8Zm0 0c6-14 22-18 24-8 2 9-14 9-24 8Z" fill="var(--t1-bg)" stroke="var(--berry)" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="98" cy="14" r="3" fill="var(--gold-text)" opacity=".6"/><circle cx="14" cy="16" r="2" fill="var(--pine)" opacity=".5"/>
+      </svg>
+      <h3>${own ? 'Your list is empty' : `${esc(firstName(user))} hasn't added any wishes yet`}</h3>
+      <p>${own ? "Add the first thing you're dreaming of. Your family will see it right away." : 'Check back soon. New wishes show up here as soon as they are added.'}</p>
+    </div>`;
+  } else {
+    grid.innerHTML = list.map((g, i) => giftCard(g, own).replace('<article', `<article style="animation-delay:${i * 50}ms"`)).join('');
+  }
+}
+
+function render() { renderHero(); renderFamily(); renderList(); }
+
+function toast(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<span class="tile">${icon('sparkles')}</span><span>${msg}</span>`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 260); }, 3200);
+}
+
+function burst(btn) {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const r = btn.getBoundingClientRect();
+  const b = document.createElement('div');
+  b.className = 'burst';
+  b.style.left = (r.left + r.width / 2 + scrollX) + 'px';
+  b.style.top = (r.top + r.height / 2 + scrollY) + 'px';
+  b.style.position = 'absolute';
+  const colors = ['#D9A441', '#C23149', '#1D5A44', '#F1D58E', '#6CC79D'];
+  for (let i = 0; i < 14; i++) {
+    const a = (Math.PI * 2 * i) / 14, d = 40 + (i % 3) * 14;
+    const p = document.createElement('i');
+    p.style.background = colors[i % colors.length];
+    p.style.setProperty('--x', Math.cos(a) * d + 'px');
+    p.style.setProperty('--y', Math.sin(a) * d + 'px');
+    b.appendChild(p);
+  }
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 800);
+}
+
+function setStatus(id, status, btn) {
+  const g = gifts.find((x) => x.id === id);
+  g.status = status;
+  if (status === 'will_buy') { burst(btn); toast(`You're getting the <b>${esc(g.item)}</b>. ${esc(firstName(users.find((u) => u.id === g.userId)))} won't see it.`); }
+  if (status === 'bought') toast(`Marked as bought. Nice one!`);
+  renderList();
+}
+
+document.addEventListener('click', (e) => {
+  const person = e.target.closest('.person');
+  if (person) { selected = Number(person.dataset.user); editing = null; renderFamily(); renderList(); return; }
+  const act = e.target.closest('[data-act]');
+  if (act) {
+    const id = Number(act.closest('[data-id]')?.dataset.id);
+    const a = act.dataset.act;
+    if (a === 'claim') setStatus(id, 'will_buy', act);
+    if (a === 'bought') setStatus(id, 'bought', act);
+    if (a === 'undo') setStatus(id, 'pending', act);
+    if (a === 'edit') { editing = id; renderList(); document.getElementById('e-item')?.focus(); }
+    if (a === 'cancel-edit') { editing = null; renderList(); }
+    if (a === 'delete') {
+      pendingDelete = id;
+      document.getElementById('confirm-title').textContent = `Remove "${gifts.find((g) => g.id === id).item}"?`;
+      document.getElementById('confirm').showModal();
+    }
+    return;
+  }
+  const tgl = e.target.closest('.theme-toggle');
+  if (tgl) { setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); return; }
+  const view = e.target.closest('[data-view]');
+  if (view) { showView(view.dataset.view); }
+});
+
+document.addEventListener('focusin', (e) => { if (e.target.id === 'c-item') document.getElementById('composer').classList.add('is-open'); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && editing) { editing = null; renderList(); } });
+document.addEventListener('submit', (e) => {
+  const f = e.target;
+  if (!f.dataset.form) return;
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(f));
+  if (!data.item?.trim()) return;
+  if (f.dataset.form === 'add') {
+    gifts.push({ id: nextId++, userId: ME, item: data.item.trim(), description: data.description || '', priceRange: data.priceRange || '', status: 'pending', added: 'just now' });
+    toast(`Added <b>${esc(data.item.trim())}</b> to your list`);
+    render();
+  } else {
+    const g = gifts.find((x) => x.id === editing);
+    Object.assign(g, { item: data.item.trim(), description: data.description, priceRange: data.priceRange });
+    editing = null; renderList(); toast('Saved');
+  }
+});
+document.getElementById('confirm-cancel').onclick = () => document.getElementById('confirm').close();
+document.getElementById('confirm-ok').onclick = () => {
+  gifts = gifts.filter((g) => g.id !== pendingDelete);
+  document.getElementById('confirm').close();
+  toast('Removed from your list');
+  render();
+};
+
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  document.querySelectorAll('.theme-toggle').forEach((b) => {
+    b.innerHTML = icon(t === 'dark' ? 'sun' : 'moon');
+    b.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  });
+}
+
+function showView(v) {
+  document.querySelectorAll('.mockbar [data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+  const login = v === 'login';
+  document.getElementById('view-login').hidden = !login;
+  document.getElementById('view-app').hidden = login;
+  if (!login) { selected = v === 'me' ? ME : Number(v); editing = null; render(); }
+  scrollTo(0, 0);
+}
+
+function makeSnow() {
+  // Seeded so the layout is stable between renders (the app should do the same to avoid hydration mismatches)
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  document.querySelectorAll('.snow').forEach((layer) => {
+    let html = '';
+    for (let i = 0; i < 36; i++) {
+      const size = 2 + rnd() * 3.5;
+      html += `<i style="left:${(rnd() * 100).toFixed(2)}%;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;opacity:${(0.35 + rnd() * 0.5).toFixed(2)};animation-duration:${(9 + rnd() * 12).toFixed(1)}s;animation-delay:-${(rnd() * 20).toFixed(1)}s;--drift:${(rnd() * 40 - 20).toFixed(0)}px"></i>`;
+    }
+    layer.innerHTML = html;
+  });
+}
+
+document.querySelectorAll('[data-icon]').forEach((el) => { el.innerHTML = icon(el.dataset.icon); });
+document.getElementById('year').textContent = new Date().getFullYear();
+document.getElementById('year2').textContent = new Date().getFullYear();
+setTheme(new URLSearchParams(location.search).get('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+makeSnow();
+if (new URLSearchParams(location.search).has('shot')) document.querySelector('.mockbar').hidden = true;
+showView(new URLSearchParams(location.search).get('view') || 'me');
+</script>
+</body>
+</html>
