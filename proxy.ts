@@ -21,7 +21,7 @@ export const proxy = auth((req) => {
   return NextResponse.next();
 });
 
-// Protect all routes except API routes, static files, and images
+// Protect all routes except API routes, static files, images and the app icon
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|icon.svg).*)'],
 };
