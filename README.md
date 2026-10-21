@@ -6,7 +6,7 @@ A family Christmas wishlist app where family members can add gift ideas, mark it
 
 - Create and manage your Christmas wishlist
 - See family members' wishlists
-- Mark gifts as purchased (hidden from the gift owner)
+- Mark gifts as claimed or purchased (hidden from the gift owner)
 - Google OAuth and email/password authentication
 - Email whitelist to restrict access to family members only
 
@@ -97,11 +97,14 @@ If you want "Sign in with Google":
 | `DATABASE_URL` | Yes | Neon PostgreSQL connection string |
 | `NEXTAUTH_SECRET` | Yes | Secret for session encryption |
 | `NEXTAUTH_URL` | Yes | Your app's full URL |
+| `AUTH_TRUST_HOST` | Local only | Set to `true` when running `next start` outside Vercel |
 | `ALLOWED_EMAILS` | No | Comma-separated whitelist of emails. If not set, anyone can sign up |
 | `GOOGLE_CLIENT_ID` | No | For Google OAuth sign-in |
 | `GOOGLE_CLIENT_SECRET` | No | For Google OAuth sign-in |
 
 ## Local Development
+
+Requires Node.js 24 (see `.nvmrc`; run `nvm use` if you use nvm).
 
 1. Clone the repository:
    ```bash
@@ -129,13 +132,34 @@ If you want "Sign in with Google":
 
 5. Open [http://localhost:3000](http://localhost:3000)
 
+To try a production build locally, add `AUTH_TRUST_HOST=true` to your `.env` (Auth.js only trusts the host header automatically on Vercel), then:
+
+```bash
+npm run build
+npm start
+```
+
+### Scripts
+
+| Script | What it does |
+|--------|--------------|
+| `npm run dev` | Start the dev server |
+| `npm run build` / `npm start` | Production build / serve it |
+| `npm run lint` | ESLint 9 (`eslint .`) |
+| `npm run generate` | `drizzle-kit generate`: write SQL migrations from `lib/db/schema.ts` |
+| `npm run push` | `drizzle-kit push`: apply the schema straight to the database |
+| `npm run studio` | Drizzle Studio |
+
+The production tables were created with the SQL in Step 1, so you don't need `generate` or `push` to run the app. Use them only if you deliberately change the schema.
+
 ## Tech Stack
 
-- Next.js 14
-- PostgreSQL (Neon)
+- Node.js 24
+- Next.js 16 (App Router) with React 19
+- PostgreSQL (Neon serverless driver)
 - Drizzle ORM
-- NextAuth v5
-- Tailwind CSS
+- Auth.js / NextAuth v5
+- Tailwind CSS 3 with shadcn/ui components
 
 ## License
 
