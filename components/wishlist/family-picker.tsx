@@ -1,9 +1,14 @@
 // components/wishlist/family-picker.tsx
 'use client';
 
-import { InitialsAvatar } from '@/components/initials-avatar';
+import { Avatar } from '@/components/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import type { FamilyMember } from './types';
+
+// Below 760px the row scrolls sideways to the screen edges, with a fade on the right so it looks scrollable
+const rowClass =
+  'flex gap-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-md:-mx-5 max-md:snap-x max-md:snap-mandatory max-md:scroll-px-5 max-md:overflow-x-auto max-md:px-5 max-md:pb-2.5 max-md:pt-1 max-md:[mask-image:linear-gradient(to_right,transparent,#000_20px,#000_calc(100%-44px),transparent)] sm:max-md:-mx-7 sm:max-md:px-7 md:flex-wrap md:px-0.5 md:pb-2.5 md:pt-1';
 
 export function FamilyPicker({
   members,
@@ -18,51 +23,57 @@ export function FamilyPicker({
   wishCounts: Map<number, number>;
   onSelect: (id: number) => void;
 }) {
-  // You first, then everyone else alphabetically
+  // You first, then everyone else in the order they joined
   const ordered = [...members].sort((a, b) => {
     if (a.id === currentUserId) return -1;
     if (b.id === currentUserId) return 1;
-    return a.name.localeCompare(b.name);
+    return a.id - b.id;
   });
 
   return (
-    <nav aria-label="Family members">
-      <ul className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-2 overflow-x-auto px-4 pb-2 pt-1 [scrollbar-width:thin] sm:-mx-6 sm:scroll-px-6 sm:px-6 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0 md:pt-0">
-        {ordered.map((member) => {
-          const selected = member.id === selectedId;
-          const isYou = member.id === currentUserId;
-          const count = wishCounts.get(member.id) ?? 0;
+    <div role="group" aria-label="Choose whose wishlist to see" className={cn('mt-7', rowClass)}>
+      {ordered.map((member) => {
+        const selected = member.id === selectedId;
+        const count = wishCounts.get(member.id) ?? 0;
 
-          return (
-            <li key={member.id} className="shrink-0 snap-start">
-              <button
-                type="button"
-                aria-pressed={selected}
-                onClick={() => onSelect(member.id)}
-                className={cn(
-                  'relative flex h-11 items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                  selected
-                    ? 'bg-card text-card-foreground ring-2 ring-primary'
-                    : 'bg-white/5 text-foreground ring-1 ring-white/10 hover:bg-white/10'
-                )}
-              >
-                <InitialsAvatar name={member.name} />
-                <span className="max-w-[10rem] truncate">{isYou ? 'You' : member.name}</span>
-                <span
-                  className={cn(
-                    'min-w-6 rounded-full px-1.5 py-0.5 text-center text-xs tabular-nums',
-                    selected ? 'bg-muted text-muted-foreground' : 'bg-white/10 text-foreground/80'
-                  )}
-                >
-                  <span className="sr-only">, </span>
-                  {count}
-                  <span className="sr-only">{count === 1 ? ' wish' : ' wishes'}</span>
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+        return (
+          <button
+            key={member.id}
+            type="button"
+            aria-pressed={selected}
+            onClick={() => onSelect(member.id)}
+            className={cn(
+              'relative inline-flex h-12 shrink-0 snap-start items-center gap-2.5 rounded-full border py-0 pl-2 pr-4 text-[15px] font-semibold shadow-sm transition-[background-color,border-color,color,transform] duration-200',
+              selected
+                ? 'border-ink bg-ink text-bg'
+                : 'border-line bg-surface text-ink hoverable:-translate-y-px hoverable:border-line-strong'
+            )}
+          >
+            <Avatar name={member.name} inverted={selected} />
+            <span className="max-w-[12rem] truncate">{member.id === currentUserId ? 'You' : member.name}</span>
+            <span
+              className={cn(
+                'inline-grid h-[22px] min-w-[22px] place-items-center rounded-full px-[7px] text-xs font-bold tabular-nums',
+                selected ? 'bg-[color-mix(in_srgb,var(--bg)_18%,transparent)] text-bg' : 'bg-surface-2 text-ink-2'
+              )}
+            >
+              <span className="sr-only">, </span>
+              {count}
+              <span className="sr-only">{count === 1 ? ' wish' : ' wishes'}</span>
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export function FamilyPickerSkeleton() {
+  return (
+    <div aria-hidden="true" className={cn('mt-7', rowClass)}>
+      {[112, 120, 104, 128].map((width) => (
+        <Skeleton key={width} className="h-12 shrink-0 rounded-full" style={{ width }} />
+      ))}
+    </div>
   );
 }

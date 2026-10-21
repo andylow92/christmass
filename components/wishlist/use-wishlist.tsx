@@ -1,8 +1,8 @@
-// components/wishlist/use-wishlist.ts
+// components/wishlist/use-wishlist.tsx
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { notify, notifyError } from './notify';
 import type { FamilyMember, GiftDetails, GiftStatus, WishlistGift } from './types';
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
@@ -17,10 +17,6 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   }
 
   return (response.status === 204 ? null : await response.json()) as T;
-}
-
-function errorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Something went wrong';
 }
 
 export function useWishlist() {
@@ -48,26 +44,15 @@ export function useWishlist() {
         setUsers(loadedUsers);
         setGifts(loadedGifts);
       })
-      .catch((error) => {
-        if (cancelled) return;
-        setLoadFailed(true);
-        toast.error("Couldn't load the wishlists", {
-          description: errorMessage(error),
-          action: { label: 'Try again', onClick: reload },
-        });
+      .catch(() => {
+        // Shown inline with a "Try again" button
+        if (!cancelled) setLoadFailed(true);
       });
 
     return () => {
       cancelled = true;
     };
   }, [reloadKey, reload]);
-
-  function failed(title: string, error: unknown, retry: () => void) {
-    toast.error(title, {
-      description: errorMessage(error),
-      action: { label: 'Try again', onClick: retry },
-    });
-  }
 
   async function addGift(details: GiftDetails, onSuccess?: () => void) {
     try {
@@ -77,9 +62,13 @@ export function useWishlist() {
       });
       setGifts((current) => [...(current ?? []), gift]);
       onSuccess?.();
-      toast.success(`Added “${gift.item}” to your list`);
-    } catch (error) {
-      failed("Couldn't add your wish", error, () => void addGift(details, onSuccess));
+      notify(
+        <>
+          Added <b>{gift.item}</b> to your list
+        </>
+      );
+    } catch {
+      notifyError("Couldn't add your wish. Please try again.", () => void addGift(details, onSuccess));
     }
   }
 
@@ -93,8 +82,9 @@ export function useWishlist() {
         (current ?? []).map((gift) => (gift.id === giftId ? updated : gift))
       );
       onSuccess?.();
-    } catch (error) {
-      failed("Couldn't save your changes", error, () =>
+      notify('Saved');
+    } catch {
+      notifyError("Couldn't save your changes. Please try again.", () =>
         void updateGift(giftId, details, onSuccess)
       );
     }
@@ -104,11 +94,13 @@ export function useWishlist() {
     try {
       await request<null>(`/api/gifts/${giftId}`, { method: 'DELETE' });
       setGifts((current) => (current ?? []).filter((gift) => gift.id !== giftId));
-    } catch (error) {
-      failed("Couldn't remove that wish", error, () => void deleteGift(giftId));
+      notify('Removed from your list');
+    } catch {
+      notifyError("Couldn't remove that wish. Please try again.", () => void deleteGift(giftId));
     }
   }
 
+  /** Resolves to false when the server refused and the change was rolled back. */
   async function setStatus(giftId: number, status: GiftStatus, previous: GiftStatus | null) {
     // Optimistic: flip it now, roll back if the server says no
     const apply = (value: GiftStatus | null) =>
@@ -122,9 +114,11 @@ export function useWishlist() {
         method: 'PATCH',
         body: JSON.stringify({ status }),
       });
-    } catch (error) {
+      return true;
+    } catch {
       apply(previous);
-      failed("Couldn't update that gift", error, () => void setStatus(giftId, status, previous));
+      notifyError("Couldn't update that. Please try again.");
+      return false;
     }
   }
 

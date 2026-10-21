@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AuthShell, FormError, GoogleIcon, OrDivider, authLinkClass } from '@/components/auth/auth-shell';
+import { AuthShell, FormError, GoogleIcon, OrDivider, Spinner, authLinkClass } from '@/components/auth/auth-shell';
 
 // Keep in sync with MIN_PASSWORD_LENGTH in lib/validation.ts
 const MIN_PASSWORD_LENGTH = 8;
@@ -83,7 +83,7 @@ export default function SignupPage() {
   return (
     <AuthShell
       title="Join the family list"
-      subtitle="Make a wishlist and see what everyone else is hoping for."
+      subtitle="Create your account to start sharing wishes."
       footer={
         <>
           Already have an account?{' '}
@@ -95,8 +95,8 @@ export default function SignupPage() {
     >
       <Button
         type="button"
-        variant="outline"
-        className="h-11 w-full"
+        variant="soft"
+        className="w-full"
         onClick={handleGoogleSignUp}
         disabled={isLoading}
       >
@@ -104,10 +104,10 @@ export default function SignupPage() {
         Sign up with Google
       </Button>
 
-      <OrDivider />
+      <OrDivider>or sign up with email</OrDivider>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1.5">
+      <form onSubmit={handleSubmit} className="grid gap-4">
+        <div className="grid gap-1.5">
           <Label htmlFor="name">Name</Label>
           <Input
             id="name"
@@ -121,20 +121,20 @@ export default function SignupPage() {
           />
         </div>
 
-        <div className="space-y-1.5">
+        <div className="grid gap-1.5">
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder="you@family.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
 
-        <div className="space-y-1.5">
+        <div className="grid gap-1.5">
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
@@ -146,12 +146,12 @@ export default function SignupPage() {
             required
             minLength={MIN_PASSWORD_LENGTH}
           />
-          <p id="password-hint" className="text-xs text-muted-foreground">
+          <p id="password-hint" className="text-[13px] text-ink-3">
             At least {MIN_PASSWORD_LENGTH} characters.
           </p>
         </div>
 
-        <div className="space-y-1.5">
+        <div className="grid gap-1.5">
           <Label htmlFor="confirmPassword">Confirm password</Label>
           <Input
             id="confirmPassword"
@@ -166,8 +166,15 @@ export default function SignupPage() {
 
         {error && <FormError>{error}</FormError>}
 
-        <Button type="submit" className="h-11 w-full" disabled={isLoading}>
-          {isLoading ? 'Creating account…' : 'Create account'}
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner />
+              Creating your account…
+            </>
+          ) : (
+            'Create account'
+          )}
         </Button>
       </form>
     </AuthShell>

@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AuthShell, FormError, GoogleIcon, OrDivider, authLinkClass } from '@/components/auth/auth-shell';
+import { AuthShell, FormError, GoogleIcon, OrDivider, Spinner, authLinkClass } from '@/components/auth/auth-shell';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -49,20 +49,20 @@ export default function LoginPage() {
   return (
     <AuthShell
       title="Welcome back"
-      subtitle="Sign in to see what the family is wishing for."
+      subtitle="Sign in to see what everyone's wishing for."
       footer={
         <>
-          Don&apos;t have an account?{' '}
+          New here?{' '}
           <Link href="/signup" className={authLinkClass}>
-            Sign up
+            Create an account
           </Link>
         </>
       }
     >
       <Button
         type="button"
-        variant="outline"
-        className="h-11 w-full"
+        variant="soft"
+        className="w-full"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
       >
@@ -70,28 +70,29 @@ export default function LoginPage() {
         Continue with Google
       </Button>
 
-      <OrDivider />
+      <OrDivider>or sign in with email</OrDivider>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1.5">
+      <form onSubmit={handleSubmit} className="grid gap-4">
+        <div className="grid gap-1.5">
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder="you@family.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
 
-        <div className="space-y-1.5">
+        <div className="grid gap-1.5">
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
             type="password"
             autoComplete="current-password"
+            placeholder="Your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -100,8 +101,15 @@ export default function LoginPage() {
 
         {error && <FormError>{error}</FormError>}
 
-        <Button type="submit" className="h-11 w-full" disabled={isLoading}>
-          {isLoading ? 'Signing in…' : 'Sign in'}
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner />
+              Signing in…
+            </>
+          ) : (
+            'Sign in'
+          )}
         </Button>
       </form>
     </AuthShell>

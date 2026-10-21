@@ -1,11 +1,10 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { Fraunces } from "next/font/google";
+import { Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/session-provider";
-import { Header } from "@/components/header";
-import { Snowfall } from "@/components/snowfall";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
@@ -13,27 +12,27 @@ const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-const fraunces = Fraunces({
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
   variable: "--font-display",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Family Christmas Wishlist",
+    default: "Family Wishlist",
     template: "%s · Family Wishlist",
   },
   description: "Share Christmas wishes with your family and keep the surprises secret",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0E2A22",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F7F4EE" },
+    { media: "(prefers-color-scheme: dark)", color: "#0C1512" },
+  ],
 };
 
 export default function RootLayout({
@@ -44,15 +43,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable}`}
+      className={`${geistSans.variable} ${instrumentSerif.variable}`}
+      suppressHydrationWarning
     >
-      <body className="font-sans antialiased">
-        <Snowfall />
-        <SessionProvider>
-          <Header />
-          {children}
-        </SessionProvider>
-        <Toaster />
+      <body className="font-sans">
+        <ThemeProvider>
+          <SessionProvider>{children}</SessionProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

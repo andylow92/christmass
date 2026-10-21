@@ -14,6 +14,7 @@ export interface WishlistGift {
   priceRange: string | null;
   // Always null for the viewer's own gifts: the server keeps the surprise
   status: GiftStatus | null;
+  createdAt?: string | null;
 }
 
 export interface GiftDetails {
