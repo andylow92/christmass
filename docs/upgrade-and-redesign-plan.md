@@ -18,9 +18,7 @@ Work on a new branch off `main` and open a PR when done. Vercel will build a pre
 
 These are real bugs found in review. Fix them before touching dependencies.
 
-1. **`app/api/users/route.ts` leaks password hashes to anyone.** `middleware.ts` excludes `/api` from its matcher. This `GET` has no `auth()` check, and `db.select().from(users)` returns every column (`email`, bcrypt `password`).
-   - `GET`: require `auth()` and return 401 without a session. Select only `{ id: users.id, name: users.name }`.
-   - `POST`: delete it. The UI never calls it, and it lets anyone create users without auth, bypassing `ALLOWED_EMAILS`.
+1. **Done in PR #12, skip it.** `app/api/users/route.ts` now requires `auth()`, returns only `{ id, name }`, has no `POST`, and is `force-dynamic`. Keep that behavior through the upgrade; Verification step 4 re-checks it.
 2. **`app/api/gifts/[id]/route.ts` PATCH passes the raw request body to `.set(updates)`.** This lets a gift owner reassign `userId`/`id`/`createdAt`, and anyone set `status` to an arbitrary string.
    - Validate with zod (already a dependency). Put the shared schemas in a new `lib/validation.ts`:
      - details: `item` trimmed, 1–200 chars; `description` ≤ 2000 chars, optional/nullable; `priceRange` ≤ 50 chars, optional/nullable.
