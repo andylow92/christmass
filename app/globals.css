@@ -3,43 +3,149 @@
 @tailwind utilities;
 
 @layer base {
-  /* "Cozy evening by the tree": pine night page, cream paper cards */
+  /* "Modern Nordic Christmas": warm porcelain, crisp white cards, deep pine, touches of gold and berry */
   :root {
-    --background: 163 50% 11%;
-    --foreground: 40 65% 95%;
-
-    --card: 40 65% 95%;
-    --card-foreground: 30 27% 13%;
-
-    --popover: 40 65% 95%;
-    --popover-foreground: 30 27% 13%;
-
-    --primary: 350 65% 42%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 38 45% 89%;
-    --secondary-foreground: 30 27% 13%;
-
-    --muted: 38 45% 89%;
-    --muted-foreground: 32 15% 36%;
-
-    --accent: 39 75% 56%;
-    --accent-foreground: 30 27% 13%;
-
-    --success: 154 46% 34%;
-    --success-foreground: 0 0% 100%;
-
-    --warning: 38 85% 30%;
-    --warning-soft: 43 88% 88%;
-
-    --destructive: 355 70% 40%;
+    /* shadcn/ui variables (HSL triplets) */
+    --background: 40 36% 95.1%; /* bg */
+    --foreground: 40 5.7% 10.4%; /* ink */
+    --card: 0 0% 100%; /* surface */
+    --card-foreground: 40 5.7% 10.4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 40 5.7% 10.4%;
+    --primary: 158.4 51.3% 23.3%; /* pine */
+    --primary-foreground: 0 0% 100%; /* pine-ink */
+    --secondary: 38.6 36.8% 92.5%; /* surface-2 */
+    --secondary-foreground: 40 5.7% 10.4%;
+    --muted: 38.6 36.8% 92.5%;
+    --muted-foreground: 40 7% 33.7%; /* ink-2 */
+    --accent: 38.6 36.8% 92.5%;
+    --accent-foreground: 40 5.7% 10.4%;
+    --destructive: 349.7 63.6% 43.1%; /* berry */
     --destructive-foreground: 0 0% 100%;
+    --border: 38.8 26.2% 87.3%; /* line */
+    --input: 38.8 26.2% 87.3%;
+    --ring: 158.4 51.3% 23.3%;
+    --radius: 1.25rem;
 
-    --border: 36 30% 82%;
-    --input: 36 30% 82%;
-    --ring: 350 65% 42%;
+    /* Design tokens (full colour values) */
+    --bg: #f7f4ee;
+    --bg-glow-a: #efe5d1;
+    --bg-glow-b: #e2ede6;
+    --surface: #ffffff;
+    --surface-2: #f3eee5;
+    --surface-3: #eae3d7;
+    --ink: #1c1b19;
+    --ink-2: #5c5850;
+    --ink-3: #736e66; /* mockup #77726a, darkened to pass AA on bg too */
+    --line: #e7e1d6;
+    --line-strong: #d8cfc0;
+    --pine: #1d5a44;
+    --pine-hover: #174a38;
+    --pine-ink: #ffffff;
+    --pine-soft: #e2eee7;
+    --pine-text: #1d5a44;
+    --gold-soft: #f7edd8;
+    --gold-text: #7a5410;
+    --gold-line: #ead7ae;
+    --berry: #b42840;
+    --berry-ink: #ffffff;
+    --berry-soft: #fbe7ea;
+    --berry-text: #9a1f35;
+    --hero-1: #0f3b2e;
+    --hero-2: #17533f;
+    --hero-ink: #f6f1e7;
+    --hero-ink-2: #c9d8cf;
 
-    --radius: 1rem;
+    --shadow-sm: 0 1px 2px rgba(28, 27, 25, 0.05);
+    --shadow: 0 1px 2px rgba(28, 27, 25, 0.05), 0 12px 32px -14px rgba(28, 27, 25, 0.16);
+    --shadow-lg: 0 2px 6px rgba(28, 27, 25, 0.06), 0 28px 56px -24px rgba(28, 27, 25, 0.28);
+    --focus-ring: 0 0 0 3px rgba(29, 90, 68, 0.28);
+
+    /* Avatar and tile tones: background, text */
+    --t0-bg: #e2eee7;
+    --t0-fg: #1d5a44;
+    --t1-bg: #fbe7ea;
+    --t1-fg: #9a1f35;
+    --t2-bg: #f7edd8;
+    --t2-fg: #7a5410;
+    --t3-bg: #eceaf8;
+    --t3-fg: #463f98;
+    --t4-bg: #e4edf6;
+    --t4-fg: #23507c;
+    --t5-bg: #f3e8df;
+    --t5-fg: #6e4027;
+
+    color-scheme: light;
+  }
+
+  .dark {
+    --background: 160 27.3% 6.5%;
+    --foreground: 40 30% 92.2%;
+    --card: 160 24% 9.8%;
+    --card-foreground: 40 30% 92.2%;
+    --popover: 160 24% 9.8%;
+    --popover-foreground: 40 30% 92.2%;
+    --primary: 152.3 44.8% 60.2%;
+    --primary-foreground: 160 27.3% 6.5%;
+    --secondary: 160 22.4% 13.1%;
+    --secondary-foreground: 40 30% 92.2%;
+    --muted: 160 22.4% 13.1%;
+    --muted-foreground: 144 6.6% 70.2%;
+    --accent: 160 22.4% 13.1%;
+    --accent-foreground: 40 30% 92.2%;
+    --destructive: 350.1 80.1% 70.4%;
+    --destructive-foreground: 350 41% 7.3%;
+    --border: 157.5 19% 16.5%;
+    --input: 157.5 19% 16.5%;
+    --ring: 152.3 44.8% 60.2%;
+
+    --bg: #0c1512;
+    --bg-glow-a: rgba(201, 154, 59, 0.1);
+    --bg-glow-b: rgba(79, 181, 138, 0.09);
+    --surface: #131f1b;
+    --surface-2: #1a2924;
+    --surface-3: #22342d;
+    --ink: #f1ede5;
+    --ink-2: #aeb8b2;
+    --ink-3: #849089;
+    --line: #22322c;
+    --line-strong: #2f433a;
+    --pine: #6cc79d;
+    --pine-hover: #84d3ae;
+    --pine-ink: #0c1512;
+    --pine-soft: rgba(108, 199, 157, 0.14);
+    --pine-text: #8fd6b4;
+    --gold-soft: rgba(226, 182, 90, 0.13);
+    --gold-text: #ebc77c;
+    --gold-line: rgba(226, 182, 90, 0.3);
+    --berry: #f0778b;
+    --berry-ink: #1a0b0e;
+    --berry-soft: rgba(240, 119, 139, 0.13);
+    --berry-text: #f49aaa;
+    --hero-1: #134034;
+    --hero-2: #0d2a21;
+    --hero-ink: #f6f1e7;
+    --hero-ink-2: #b9ccc2;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 14px 34px -16px rgba(0, 0, 0, 0.65);
+    --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.4), 0 28px 56px -24px rgba(0, 0, 0, 0.75);
+    --focus-ring: 0 0 0 3px rgba(108, 199, 157, 0.32);
+
+    --t0-bg: rgba(108, 199, 157, 0.16);
+    --t0-fg: #8fd6b4;
+    --t1-bg: rgba(240, 119, 139, 0.16);
+    --t1-fg: #f49aaa;
+    --t2-bg: rgba(226, 182, 90, 0.16);
+    --t2-fg: #ebc77c;
+    --t3-bg: rgba(150, 140, 240, 0.16);
+    --t3-fg: #b9b2f5;
+    --t4-bg: rgba(110, 170, 230, 0.16);
+    --t4-fg: #a3c8ee;
+    --t5-bg: rgba(210, 150, 110, 0.16);
+    --t5-fg: #e2b79a;
+
+    color-scheme: dark;
   }
 }
 
@@ -49,62 +155,153 @@
   }
 
   html {
-    @apply bg-background;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    @apply min-h-dvh bg-background text-foreground;
-    /* Soft gold glow above the fold; scrolls with the page */
-    background-image: radial-gradient(
-      1200px 600px at 50% -10%,
-      hsl(39 75% 56% / 0.16),
-      transparent 60%
-    );
+    min-height: 100dvh;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink);
+    /* Two soft glows above the fold; they scroll with the page */
+    background:
+      radial-gradient(1100px 520px at 88% -12%, var(--bg-glow-a), transparent 62%),
+      radial-gradient(900px 460px at -12% -6%, var(--bg-glow-b), transparent 58%),
+      var(--bg);
     background-repeat: no-repeat;
+    -webkit-font-smoothing: antialiased;
+    transition:
+      background-color 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+      color 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
+
+  /* Classes that set display must never override the hidden attribute */
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-[1040px] px-5 sm:px-7;
+  }
+
+  /* Snow: seeded flakes, see components/snow.tsx */
+  .snow > i {
+    position: absolute;
+    top: -10px;
+    border-radius: 999px;
+    background: #fff;
+    animation: fall linear infinite;
+  }
+
+  /* Hero ornaments sway from the top of their string */
+  .orn {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+    animation: sway 6s ease-in-out infinite;
+  }
+  .orn:nth-of-type(2) {
+    animation-duration: 7.5s;
+    animation-delay: -2s;
+  }
+  .orn:nth-of-type(3) {
+    animation-duration: 5.5s;
+    animation-delay: -1s;
+  }
+
+  /* Sparkle burst on claim, see components/wishlist/sparkle-burst.ts */
+  .burst {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .burst > i {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    left: -3px;
+    top: -3px;
+    animation: burst 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  /* Small controls keep a 44px hit area on touch screens */
+  @media (pointer: coarse) {
+    .tap-target::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: max(100%, 44px);
+      height: max(100%, 44px);
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -10px, 0);
+  }
+  100% {
+    transform: translate3d(var(--drift, 20px), var(--fall, 420px), 0);
+  }
+}
+
+@keyframes burst {
+  0% {
+    transform: translate(0, 0) rotate(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) rotate(160deg) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+/* Outside the layers so it wins over shadow utilities: focus is always visible */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
   }
-}
-
-@keyframes snow-fall {
-  from {
-    transform: translate3d(0, -10vh, 0);
-  }
-  to {
-    transform: translate3d(0, 105vh, 0);
-  }
-}
-
-@keyframes snow-sway {
-  from {
-    transform: translateX(calc(var(--sway) * -1));
-  }
-  to {
-    transform: translateX(var(--sway));
-  }
-}
-
-@layer components {
-  .snowflake {
-    position: absolute;
-    top: 0;
-    animation: snow-fall var(--fall-duration) linear var(--fall-delay) infinite;
-    will-change: transform;
-  }
-
-  .snowflake > span {
-    display: block;
-    border-radius: 9999px;
-    background: white;
-    animation: snow-sway var(--sway-duration) ease-in-out infinite alternate;
+  .snow {
+    display: none;
   }
 }

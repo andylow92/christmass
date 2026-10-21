@@ -1,7 +1,11 @@
 // components/auth/auth-shell.tsx
 import type { ReactNode } from 'react';
-import { BrandMark } from '@/components/brand-mark';
+import { Check, LoaderCircle, ShoppingBag } from 'lucide-react';
+import { Brand } from '@/components/brand';
+import { Snow } from '@/components/snow';
+import { ThemeToggle } from '@/components/theme-toggle';
 
+/** Split screen from 960px: pine art panel on the left, the form on the right. Stacked below. */
 export function AuthShell({
   title,
   subtitle,
@@ -14,41 +18,83 @@ export function AuthShell({
   footer: ReactNode;
 }) {
   return (
-    <main className="relative z-10 flex min-h-dvh flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="mb-8 flex justify-center">
-          <BrandMark size="lg" />
+    <div className="grid min-h-dvh lg:grid-cols-[1.05fr_1fr]">
+      <aside className="relative isolate overflow-hidden bg-[radial-gradient(700px_360px_at_90%_0%,rgba(226,182,90,.30),transparent_60%),radial-gradient(600px_320px_at_0%_100%,rgba(108,199,157,.22),transparent_60%),linear-gradient(155deg,#17533F,#0B2E23)] px-6 pb-9 pt-7 text-hero-ink lg:flex lg:flex-col lg:justify-between lg:px-14 lg:py-10">
+        <Snow className="lg:[--fall:105vh]" />
+        <Brand onHero className="relative z-[2]" />
+        <div className="relative z-[2] mt-9 max-w-[520px]">
+          <h1 className="font-display text-[clamp(44px,6.5vw,76px)] font-normal leading-[0.98] tracking-[-0.02em]">
+            Wishes,
+            <br />
+            <em className="text-gold-bright">shared.</em>
+          </h1>
+          <p className="mt-4 max-w-[420px] text-[17px] text-hero-ink-2">
+            One list for the whole family. See what everyone&apos;s hoping for, quietly claim a gift, and
+            never buy the same socks twice.
+          </p>
         </div>
-        <div className="rounded-lg bg-card p-6 text-card-foreground shadow-2xl shadow-black/30 sm:p-8">
-          <h1 className="font-display text-2xl font-semibold tracking-tight">{title}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
-          <div className="mt-6">{children}</div>
+        <FloatingCards />
+      </aside>
+
+      <main className="relative grid place-items-center px-5 pb-[120px] pt-8 lg:p-12">
+        <ThemeToggle className="absolute right-4 top-4 z-[5]" />
+        <div className="w-full max-w-[400px]">
+          <h2 className="font-display text-[40px] font-normal leading-[1.05]">{title}</h2>
+          <p className="mb-7 mt-2 text-ink-2">{subtitle}</p>
+          {children}
+          <p className="mb-[1em] mt-6 text-center text-[15px] text-ink-2">{footer}</p>
         </div>
-        <p className="mt-6 text-center text-sm text-foreground/75">{footer}</p>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
 
-export function OrDivider() {
+const floatingCardClass =
+  'absolute w-[300px] rounded-[18px] border border-white/15 bg-white/[0.08] p-4 text-hero-ink shadow-[0_20px_40px_-20px_rgba(0,0,0,.5)] backdrop-blur-[10px]';
+const floatingPillClass =
+  'mt-3 inline-flex h-[30px] items-center gap-1.5 rounded-full bg-[rgba(241,213,142,.16)] px-3 text-[13px] font-semibold text-gold-bright [&_svg]:size-3.5';
+
+function FloatingCards() {
   return (
-    <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
-      <span className="h-px flex-1 bg-border" />
-      or
-      <span className="h-px flex-1 bg-border" />
+    <div aria-hidden="true" className="relative z-[2] mt-10 hidden h-[230px] lg:block">
+      <div className={`${floatingCardClass} left-0 top-2.5 -rotate-[4deg]`}>
+        <b className="block">Cozy wool blanket</b>
+        <small className="mt-0.5 block text-[13px] text-hero-ink-2">Mom · $40–60</small>
+        <span className={floatingPillClass}>
+          <ShoppingBag />
+          Someone&apos;s on it
+        </span>
+      </div>
+      <div className={`${floatingCardClass} left-[210px] top-24 rotate-[3deg]`}>
+        <b className="block">Noise-cancelling headphones</b>
+        <small className="mt-0.5 block text-[13px] text-hero-ink-2">Andy · $250–350</small>
+        <span className={floatingPillClass}>
+          <Check />
+          Bought
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export function OrDivider({ children }: { children: ReactNode }) {
+  return (
+    <div className="my-5 flex items-center gap-3 text-[13px] text-ink-3 before:h-px before:flex-1 before:bg-line after:h-px after:flex-1 after:bg-line">
+      {children}
     </div>
   );
 }
 
 export function FormError({ children }: { children: ReactNode }) {
   return (
-    <div
-      role="alert"
-      className="rounded-md border border-destructive/25 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-    >
+    <div role="alert" className="rounded-input bg-berry-soft px-3.5 py-2.5 text-[15px] text-berry-text">
       {children}
     </div>
   );
+}
+
+export function Spinner() {
+  return <LoaderCircle aria-hidden="true" className="animate-spin" />;
 }
 
 export function GoogleIcon() {
@@ -74,5 +120,4 @@ export function GoogleIcon() {
   );
 }
 
-export const authLinkClass =
-  'rounded-sm font-semibold text-accent underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent';
+export const authLinkClass = 'rounded-sm font-semibold text-pine-text no-underline hover:underline underline-offset-4';

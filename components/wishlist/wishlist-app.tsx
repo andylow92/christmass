@@ -1,37 +1,25 @@
 // components/wishlist/wishlist-app.tsx
 'use client';
 
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { RotateCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AddGiftForm } from './add-gift-form';
-import { EmptyState } from './empty-state';
-import { FamilyPicker } from './family-picker';
+import { useClientValue } from '@/lib/use-mounted';
+import { Composer } from './composer';
+import { EmptyState, ErrorState } from './empty-state';
+import { FamilyPicker, FamilyPickerSkeleton } from './family-picker';
 import { GiftCard } from './gift-card';
-import { GiftSkeletonList } from './gift-skeleton';
+import { GiftGridSkeleton } from './gift-grid-skeleton';
+import { Hero } from './hero';
+import { ListHeader, ListHeaderSkeleton } from './list-header';
+import { notify } from './notify';
+import { sparkleBurst } from './sparkle-burst';
 import { useWishlist } from './use-wishlist';
+import { firstNameOf } from './utils';
 import type { GiftStatus, WishlistGift } from './types';
 
 const STATUS_ORDER: Record<GiftStatus, number> = { pending: 0, will_buy: 1, bought: 2 };
-
-function sleepsUntilChristmas(now = new Date()) {
-  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-  let christmas = Date.UTC(now.getFullYear(), 11, 25);
-  if (today > christmas) christmas = Date.UTC(now.getFullYear() + 1, 11, 25);
-  return Math.round((christmas - today) / 86_400_000);
-}
-
-// The countdown depends on the viewer's clock, so it only renders on the client
-const subscribeToNothing = () => () => {};
-
-function countdownText(sleeps: number) {
-  if (sleeps === 0) return 'Merry Christmas!';
-  return `${sleeps} ${sleeps === 1 ? 'sleep' : 'sleeps'} until Christmas`;
-}
-
-const wishCount = (n: number) => `${n} ${n === 1 ? 'wish' : 'wishes'}`;
 
 export function WishlistApp() {
   const { data: session } = useSession();
@@ -40,14 +28,14 @@ export function WishlistApp() {
   const [pickedId, setPickedId] = useState<number | null>(null);
   // Statuses as they were when the list was opened, so cards don't jump around as you claim them
   const [sortStatuses, setSortStatuses] = useState<Map<number, GiftStatus | null>>(new Map());
-  const sleeps = useSyncExternalStore(subscribeToNothing, sleepsUntilChristmas, () => null);
+  const year = useClientValue(() => new Date().getFullYear(), null);
 
   const currentUserId = session?.user?.id ? Number(session.user.id) : null;
-  const firstName = session?.user?.name?.split(' ')[0];
   // Default to your own list so the page is never blank
   const selectedId = pickedId ?? currentUserId;
   const selectedUser = users?.find((user) => user.id === selectedId);
   const isOwnList = selectedId !== null && selectedId === currentUserId;
+  const selectedFirstName = firstNameOf(selectedUser?.name);
 
   const wishCounts = useMemo(() => {
     const counts = new Map<number, number>();
@@ -58,7 +46,7 @@ export function WishlistApp() {
   const visibleGifts = useMemo(() => {
     const list = (gifts ?? []).filter((gift) => gift.userId === selectedId);
     return isOwnList
-      ? list.sort((a, b) => b.id - a.id) // newest first, right under the form
+      ? list.sort((a, b) => a.id - b.id) // the order you added them
       : list.sort((a, b) => {
           const statusOf = (gift: WishlistGift) =>
             (sortStatuses.has(gift.id) ? sortStatuses.get(gift.id) : gift.status) ?? 'pending';
@@ -71,85 +59,81 @@ export function WishlistApp() {
     setSortStatuses(new Map((gifts ?? []).map((gift) => [gift.id, gift.status])));
   };
 
-  const heading = isOwnList ? 'Your wishlist' : selectedUser ? `${selectedUser.name}'s wishlist` : '';
+  const changeStatus = (gift: WishlistGift, status: GiftStatus, origin: HTMLElement) => {
+    if (status === 'will_buy') {
+      sparkleBurst(origin);
+      notify(
+        <>
+          You&apos;re getting the <b>{gift.item}</b>. {selectedFirstName} won&apos;t see it.
+        </>
+      );
+    } else if (status === 'bought') {
+      notify('Marked as bought. Nice one!');
+    }
+    void setStatus(gift.id, status, gift.status);
+  };
+
+  // Your own list renders even if you're somehow missing from /api/users
+  const ready = !loading && !loadFailed && selectedId !== null;
 
   return (
-    <main className="relative z-10 mx-auto max-w-5xl px-4 pb-20 pt-10 sm:px-6 md:pt-14">
-      <section className="space-y-2">
-        <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-          {firstName ? (
-            `Hi, ${firstName}`
-          ) : (
-            <span className="inline-block h-10 w-56 animate-pulse rounded-md bg-white/10 align-middle md:h-12" />
-          )}
-        </h1>
-        <p className="min-h-6 text-foreground/70" aria-live="polite">
-          {sleeps !== null && countdownText(sleeps)}
-        </p>
-      </section>
+    <main className="wrap">
+      <Hero firstName={firstNameOf(session?.user?.name)} totalWishes={gifts ? gifts.length : null} />
 
-      <div className="mt-8">
-        {users ? (
-          <FamilyPicker
-            members={users}
-            currentUserId={currentUserId}
-            selectedId={selectedId}
-            wishCounts={wishCounts}
-            onSelect={selectMember}
-          />
-        ) : (
-          !loadFailed && (
-            <div className="flex gap-2" aria-hidden="true">
-              {[0, 1, 2].map((i) => (
-                <Skeleton key={i} className="h-11 w-28 rounded-full bg-white/10" />
-              ))}
-            </div>
-          )
-        )}
-      </div>
+      {users ? (
+        <FamilyPicker
+          members={users}
+          currentUserId={currentUserId}
+          selectedId={selectedId}
+          wishCounts={wishCounts}
+          onSelect={selectMember}
+        />
+      ) : (
+        !loadFailed && <FamilyPickerSkeleton />
+      )}
 
-      <section className="mt-10 space-y-5" aria-labelledby="list-heading">
+      <section aria-labelledby={ready ? 'list-heading' : undefined}>
         {loadFailed ? (
-          <EmptyState
-            action={
-              <Button onClick={reload} variant="outline">
-                <RotateCw aria-hidden="true" />
-                Try again
-              </Button>
-            }
-          >
-            We couldn&apos;t load the wishlists. Check your connection and try again.
-          </EmptyState>
+          <div className="mt-9">
+            <ErrorState
+              action={
+                <Button variant="soft" onClick={reload}>
+                  <RotateCw aria-hidden="true" />
+                  Try again
+                </Button>
+              }
+            >
+              We couldn&apos;t load the wishlists.
+            </ErrorState>
+          </div>
+        ) : !ready ? (
+          <>
+            <ListHeaderSkeleton />
+            <GiftGridSkeleton />
+          </>
         ) : (
           <>
-            {loading || !heading ? (
-              <Skeleton className="h-8 w-48 bg-white/10" />
-            ) : (
-              <h2
-                id="list-heading"
-                className="flex flex-wrap items-baseline gap-x-3 font-display text-2xl font-semibold text-foreground"
-              >
-                <span className="min-w-0 break-words">{heading}</span>
-                <span className="font-sans text-sm font-normal text-foreground/60">
-                  {wishCount(visibleGifts.length)}
-                </span>
-              </h2>
-            )}
+            <ListHeader isOwnList={isOwnList} firstName={selectedFirstName} count={visibleGifts.length} />
 
-            {isOwnList && !loading && <AddGiftForm onAdd={addGift} />}
+            {isOwnList && <Composer onAdd={addGift} />}
 
-            {loading ? (
-              <GiftSkeletonList />
-            ) : visibleGifts.length === 0 ? (
-              <EmptyState>
-                {isOwnList
-                  ? 'Your list is empty — add the first thing you’re dreaming of.'
-                  : `${selectedUser?.name ?? 'They'} hasn’t added any wishes yet.`}
-              </EmptyState>
-            ) : (
-              <ul className="grid gap-4 md:grid-cols-2">
-                {visibleGifts.map((gift: WishlistGift) => (
-                  <li key={gift.id} className="grid">
+            {/* Keyed by person so cards rise in on first load and when switching, not on every change */}
+            <ul key={selectedId} className="grid gap-4 md:grid-cols-2 md:gap-5">
+              {visibleGifts.length === 0 ? (
+                <li className="col-span-full">
+                  {isOwnList ? (
+                    <EmptyState title="Your list is empty">
+                      Add the first thing you&apos;re dreaming of. Your family will see it right away.
+                    </EmptyState>
+                  ) : (
+                    <EmptyState title={`${selectedFirstName} hasn't added any wishes yet`}>
+                      Check back soon. New wishes show up here as soon as they are added.
+                    </EmptyState>
+                  )}
+                </li>
+              ) : (
+                visibleGifts.map((gift, i) => (
+                  <li key={gift.id} className="grid animate-rise" style={{ animationDelay: `${i * 50}ms` }}>
                     {isOwnList ? (
                       <GiftCard
                         gift={gift}
@@ -159,16 +143,20 @@ export function WishlistApp() {
                     ) : (
                       <GiftCard
                         gift={gift}
-                        onStatusChange={(status) => setStatus(gift.id, status, gift.status)}
+                        onStatusChange={(status, origin) => changeStatus(gift, status, origin)}
                       />
                     )}
                   </li>
-                ))}
-              </ul>
-            )}
+                ))
+              )}
+            </ul>
           </>
         )}
       </section>
+
+      <p className="mb-[1em] mt-14 text-center text-[13px] text-ink-3">
+        Made with care for the family{year && ` · ${year}`}
+      </p>
     </main>
   );
 }
