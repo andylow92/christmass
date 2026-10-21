@@ -1,4 +1,4 @@
-// app/layout.tsx (keep this exactly as you have it)
+// app/layout.tsx
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";

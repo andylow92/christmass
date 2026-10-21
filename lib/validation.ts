@@ -34,7 +34,7 @@ export const signupSchema = z.object({
     .trim()
     .min(1, 'Name is required')
     .max(60, 'Name must be at most 60 characters'),
-  email: z.string().trim().toLowerCase().email('Please enter a valid email'),
+  email: z.string().trim().toLowerCase().pipe(z.email('Please enter a valid email')),
   password: z
     .string()
     .min(MIN_PASSWORD_LENGTH, `Password must be at least ${MIN_PASSWORD_LENGTH} characters`),

@@ -1,7 +1,4 @@
 // app/page.tsx
-'use client'
-
-
 import ChristmasWishlist from '@/components/christmas-wishlist'
 
 export default function Home() {

@@ -73,11 +73,6 @@ const ChristmasWishlist = () => {
 
   const currentUserId = session?.user?.id ? parseInt(session.user.id) : null;
 
-  useEffect(() => {
-    fetchUsers();
-    fetchGifts();
-  }, []);
-
   const fetchUsers = async () => {
     try {
       const response = await fetch('/api/users');
@@ -109,6 +104,12 @@ const ChristmasWishlist = () => {
       setGifts([]);
     }
   };
+
+  useEffect(() => {
+    // State is only set after the fetches resolve; replaced in the redesign
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void Promise.all([fetchUsers(), fetchGifts()]);
+  }, []);
 
   const addGift = async () => {
     if (newGift.item.trim()) {
