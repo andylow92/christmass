@@ -380,6 +380,7 @@ const ChristmasWishlist = () => {
                                   )}
                                 </div>
                                 <div className="flex gap-2 items-start shrink-0">
+                                  {gift.userId !== currentUserId && (
                                   <Select
                                     value={gift.status || 'pending'}
                                     onValueChange={(value: GiftStatus) => updateGiftStatus(gift.id, value)}
@@ -393,6 +394,7 @@ const ChristmasWishlist = () => {
                                       <SelectItem value="bought" className="text-amber-50 hover:bg-white/20 cursor-pointer transition-all">Bought ✓</SelectItem>
                                     </SelectContent>
                                   </Select>
+                                  )}
                                   {gift.userId === currentUserId && (
                                     <>
                                       <Button

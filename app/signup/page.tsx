@@ -29,8 +29,9 @@ export default function SignupPage() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+    // Keep in sync with MIN_PASSWORD_LENGTH in lib/validation.ts
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
       return;
     }
 
@@ -148,7 +149,7 @@ export default function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={6}
+                minLength={8}
                 className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30"
               />
             </div>
@@ -162,7 +163,7 @@ export default function SignupPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                minLength={6}
+                minLength={8}
                 className="glass border-white/30 text-white placeholder:text-white/50 focus:border-emerald-300 focus:ring-emerald-300/30"
               />
             </div>

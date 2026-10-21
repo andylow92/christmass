@@ -1,21 +1,20 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { users } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { findUserByEmail } from '@/lib/db/users';
 import bcrypt from 'bcryptjs';
 import { isEmailAllowed } from '@/lib/allowed-emails';
+import { firstIssue, signupSchema } from '@/lib/validation';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { name, email, password } = body;
-
-    if (!name || !email || !password) {
-      return NextResponse.json(
-        { error: 'Name, email, and password are required' },
-        { status: 400 }
-      );
+    const parsed = signupSchema.safeParse(await request.json().catch(() => null));
+    if (!parsed.success) {
+      return NextResponse.json({ error: firstIssue(parsed.error) }, { status: 400 });
     }
+
+    // email is already trimmed and lowercased by the schema
+    const { name, email, password } = parsed.data;
 
     // Check if email is in the allowed list
     if (!isEmailAllowed(email)) {
@@ -26,11 +25,7 @@ export async function POST(request: Request) {
     }
 
     // Check if user already exists
-    const [existingUser] = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, email))
-      .limit(1);
+    const existingUser = await findUserByEmail(email);
 
     if (existingUser) {
       return NextResponse.json(
