@@ -20,7 +20,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { formatAdded, splitLinks, tone } from './utils';
+import { chipClass, formatAdded, joinDescription, splitDescription, splitLinks, tone } from './utils';
+import { LinkField } from './link-field';
 import type { GiftDetails, GiftStatus, WishlistGift } from './types';
 
 type OwnActions = {
@@ -135,9 +136,6 @@ export function GiftCard({
     </article>
   );
 }
-
-const chipClass =
-  'inline-flex h-[30px] max-w-full items-center gap-1.5 rounded-full border border-line bg-surface px-[11px] text-[13px] font-medium text-ink-2 no-underline [&_svg]:size-3.5 [&_svg]:shrink-0';
 
 const pillClass =
   'inline-flex h-[30px] items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-[13px] font-semibold [&_svg]:size-3.5';
@@ -271,18 +269,24 @@ function EditGiftForm({
   onCancel: () => void;
 }) {
   const id = useId();
-  const [details, setDetails] = useState<GiftDetails>({
+  const [draft, setDraft] = useState(() => ({
     item: gift.item,
-    description: gift.description ?? '',
+    ...splitDescription(gift.description),
     priceRange: gift.priceRange ?? '',
-  });
+  }));
   const [saving, setSaving] = useState(false);
+
+  const update = (changes: Partial<typeof draft>) => setDraft((current) => ({ ...current, ...changes }));
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!details.item.trim()) return;
+    if (!draft.item.trim()) return;
     setSaving(true);
-    await onSave(details);
+    await onSave({
+      item: draft.item,
+      description: joinDescription(draft.notes, draft.link),
+      priceRange: draft.priceRange,
+    });
     setSaving(false);
   };
 
@@ -299,28 +303,30 @@ function EditGiftForm({
         <Label htmlFor={`${id}-item`}>Gift</Label>
         <Input
           id={`${id}-item`}
-          value={details.item}
-          onChange={(e) => setDetails({ ...details, item: e.target.value })}
+          value={draft.item}
+          onChange={(e) => update({ item: e.target.value })}
           required
           maxLength={200}
           autoFocus
         />
       </div>
+      <LinkField id={`${id}-link`} value={draft.link} onChange={(link) => update({ link })} />
       <div className="grid gap-1.5">
-        <Label htmlFor={`${id}-description`}>Details or a link</Label>
+        <Label htmlFor={`${id}-notes`}>Details</Label>
         <Textarea
-          id={`${id}-description`}
-          value={details.description}
-          onChange={(e) => setDetails({ ...details, description: e.target.value })}
-          maxLength={2000}
+          id={`${id}-notes`}
+          value={draft.notes}
+          onChange={(e) => update({ notes: e.target.value })}
+          placeholder="Size, colour, anything that helps…"
+          maxLength={1500}
         />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor={`${id}-price`}>Price range</Label>
         <Input
           id={`${id}-price`}
-          value={details.priceRange}
-          onChange={(e) => setDetails({ ...details, priceRange: e.target.value })}
+          value={draft.priceRange}
+          onChange={(e) => update({ priceRange: e.target.value })}
           maxLength={50}
         />
       </div>
@@ -328,7 +334,7 @@ function EditGiftForm({
         <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" size="sm" disabled={saving || !details.item.trim()}>
+        <Button type="submit" size="sm" disabled={saving || !draft.item.trim()}>
           <Check aria-hidden="true" />
           {saving ? 'Saving…' : 'Save'}
         </Button>

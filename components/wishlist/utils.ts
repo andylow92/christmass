@@ -26,6 +26,10 @@ const URL_PATTERN = /https?:\/\/\S+/g;
 // Punctuation that usually ends a sentence rather than the URL
 const TRAILING_PUNCTUATION = /[.,;:!?)\]}'"]+$/;
 
+/** The rounded "pill" used for a wish's links and price. */
+export const chipClass =
+  'inline-flex h-[30px] max-w-full items-center gap-1.5 rounded-full border border-line bg-surface px-[11px] text-[13px] font-medium text-ink-2 no-underline [&_svg]:size-3.5 [&_svg]:shrink-0';
+
 export interface GiftLink {
   href: string;
   host: string;
@@ -52,6 +56,38 @@ export function splitLinks(text: string | null | undefined): { rest: string; lin
     .replace(/\n{3,}/g, '\n\n')
     .trim();
   return { rest, links };
+}
+
+// "amazon.com/…" or "www.etsy.com/…": looks like a web address typed without https://
+const BARE_DOMAIN = /^(www\.)?[a-z\d-]+(\.[a-z\d-]+)*\.[a-z]{2,}(\/\S*)?$/i;
+
+/** True when the whole text is a single web address, e.g. one pasted into the wish name. */
+export function isBareUrl(text: string) {
+  const value = text.trim();
+  return /^\S+$/.test(value) && (/^https?:\/\//i.test(value) || /^www\./i.test(value));
+}
+
+/** Adds https:// to addresses typed without it, so they still show as links. */
+export function normalizeLinks(text: string) {
+  return text
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => (BARE_DOMAIN.test(part) ? `https://${part}` : part))
+    .join(' ');
+}
+
+/**
+ * The link has its own field in the forms but is stored at the end of the description,
+ * so the database doesn't change and older wishes keep working.
+ */
+export function joinDescription(notes: string, link: string) {
+  return [notes.trim(), normalizeLinks(link)].filter(Boolean).join('\n');
+}
+
+/** The reverse of joinDescription: the notes, and the links as one editable line. */
+export function splitDescription(description: string | null | undefined) {
+  const { rest, links } = splitLinks(description);
+  return { notes: rest, link: links.map((link) => link.href).join(' ') };
 }
 
 export function hostname(href: string) {
