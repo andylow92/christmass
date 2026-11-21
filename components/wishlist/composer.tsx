@@ -124,7 +124,13 @@ export function Composer({
           placeholder={needsName ? 'Now give it a name…' : "Add something you'd love…"}
           maxLength={200}
           autoComplete="off"
-          className="h-12 min-w-0 flex-1 rounded-input border-0 bg-transparent px-1 text-[17px] max-[520px]:pl-2.5 text-ink placeholder:text-ink-3 focus:outline-none focus-visible:shadow-none"
+          className={cn(
+            // Tinted, outlined well so it reads as the place to type, in both themes
+            'h-12 min-w-0 flex-1 text-ellipsis rounded-input border bg-pine-soft px-3.5 text-[17px] text-ink transition-[border-color,box-shadow] duration-200 max-[520px]:px-3 max-[520px]:text-base',
+            'border-[color-mix(in_srgb,var(--pine)_35%,transparent)] placeholder:text-ink-2',
+            'hover:border-[color-mix(in_srgb,var(--pine)_60%,transparent)]',
+            'focus:border-pine focus:outline-none focus-visible:shadow-none'
+          )}
         />
         <Button
           type="button"
