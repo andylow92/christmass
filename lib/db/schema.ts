@@ -16,6 +16,8 @@ export const gifts = pgTable('gifts', {
   description: text('description'),
   priceRange: text('price_range'),
   status: text('status', { enum: ['pending', 'will_buy', 'bought'] }).default('pending'),
+  // Who said "I'll get this". Null when nobody has, or for claims made before this was tracked.
+  claimedBy: integer('claimed_by').references(() => users.id),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });

@@ -4,6 +4,7 @@ import { gifts } from '@/lib/db/schema';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { firstIssue, giftDetailsSchema } from '@/lib/validation';
+import { toClientGift } from '@/lib/gifts';
 
 export async function GET() {
   try {
@@ -17,12 +18,7 @@ export async function GET() {
     // Return ALL gifts from all users so family members can see each other's wishlists
     const allGifts = await db.select().from(gifts);
 
-    // Keep the surprise: owners never see whether their own gifts are claimed
-    const visibleGifts = allGifts.map((gift) =>
-      gift.userId === userId ? { ...gift, status: null } : gift
-    );
-
-    return NextResponse.json(visibleGifts);
+    return NextResponse.json(allGifts.map((gift) => toClientGift(gift, userId)));
   } catch (error) {
     console.error('Error fetching gifts:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -49,7 +45,7 @@ export async function POST(request: Request) {
       .values({ userId, ...parsed.data })
       .returning();
 
-    return NextResponse.json({ ...newGift, status: null });
+    return NextResponse.json(toClientGift(newGift, userId));
   } catch (error) {
     console.error('Error creating gift:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

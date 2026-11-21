@@ -130,7 +130,7 @@ export function GiftCard({
         {isOwn ? (
           <OwnFooter gift={gift} onEdit={() => setEditing(true)} onDelete={actions.onDelete} />
         ) : (
-          <StatusFooter status={status} onChange={actions.onStatusChange} />
+          <StatusFooter status={status} claim={gift.claim} onChange={actions.onStatusChange} />
         )}
       </footer>
     </article>
@@ -193,33 +193,45 @@ function OwnFooter({
 
 function StatusFooter({
   status,
+  claim,
   onChange,
 }: {
   status: GiftStatus;
+  claim: WishlistGift['claim'];
   onChange: (status: GiftStatus, origin: HTMLElement) => void;
 }) {
+  const mine = claim === 'me';
+  // Someone else's claim is theirs to undo; older claims (claim null) stay open to everyone
+  const locked = claim === 'other';
+
+  const undo = (label: string) => (
+    <Button
+      variant="ghost"
+      size="sm"
+      aria-label={label}
+      onClick={(e) => onChange('pending', e.currentTarget)}
+    >
+      <Undo2 aria-hidden="true" />
+      Undo
+    </Button>
+  );
+
   if (status === 'will_buy') {
     return (
       <>
         <span className={cn(pillClass, 'bg-gold-soft text-gold-text')}>
           <ShoppingBag aria-hidden="true" />
-          Someone&apos;s on it
+          {mine ? "You're getting this" : "Someone's on it"}
         </span>
-        <div className="ml-auto flex items-center gap-1.5">
-          <Button variant="soft" size="sm" onClick={(e) => onChange('bought', e.currentTarget)}>
-            <Check aria-hidden="true" />
-            Mark as bought
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Undo claim"
-            title="Undo"
-            onClick={(e) => onChange('pending', e.currentTarget)}
-          >
-            <Undo2 aria-hidden="true" />
-          </Button>
-        </div>
+        {!locked && (
+          <div className="ml-auto flex items-center gap-1.5">
+            <Button variant="soft" size="sm" onClick={(e) => onChange('bought', e.currentTarget)}>
+              <Check aria-hidden="true" />
+              Mark as bought
+            </Button>
+            {undo("Undo, I won't get this")}
+          </div>
+        )}
       </>
     );
   }
@@ -229,19 +241,9 @@ function StatusFooter({
       <>
         <span className={cn(pillClass, 'bg-pine-soft text-pine-text')}>
           <Check aria-hidden="true" />
-          Bought
+          {mine ? 'You bought this' : 'Bought'}
         </span>
-        <div className="ml-auto flex items-center gap-1.5">
-          <Button
-            variant="ghost"
-            size="sm"
-            aria-label="Undo, mark as not bought"
-            onClick={(e) => onChange('pending', e.currentTarget)}
-          >
-            <Undo2 aria-hidden="true" />
-            Undo
-          </Button>
-        </div>
+        {!locked && <div className="ml-auto flex items-center gap-1.5">{undo('Undo, mark as not bought')}</div>}
       </>
     );
   }

@@ -70,7 +70,7 @@ export function WishlistApp() {
     } else if (status === 'bought') {
       notify('Marked as bought. Nice one!');
     }
-    void setStatus(gift.id, status, gift.status);
+    void setStatus(gift, status);
   };
 
   // Your own list renders even if you're somehow missing from /api/users
