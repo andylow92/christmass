@@ -5,6 +5,15 @@ import { useCallback, useEffect, useState } from 'react';
 import { notify, notifyError } from './notify';
 import type { FamilyMember, GiftDetails, GiftStatus, WishlistGift } from './types';
 
+class RequestError extends Error {
+  constructor(
+    message: string,
+    readonly status: number
+  ) {
+    super(message);
+  }
+}
+
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     ...init,
@@ -13,7 +22,7 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     const data = await response.json().catch(() => null);
-    throw new Error(data?.error ?? `Request failed (${response.status})`);
+    throw new RequestError(data?.error ?? `Request failed (${response.status})`, response.status);
   }
 
   return (response.status === 204 ? null : await response.json()) as T;
@@ -101,23 +110,29 @@ export function useWishlist() {
   }
 
   /** Resolves to false when the server refused and the change was rolled back. */
-  async function setStatus(giftId: number, status: GiftStatus, previous: GiftStatus | null) {
-    // Optimistic: flip it now, roll back if the server says no
-    const apply = (value: GiftStatus | null) =>
-      setGifts((current) =>
-        (current ?? []).map((gift) => (gift.id === giftId ? { ...gift, status: value } : gift))
-      );
+  async function setStatus(gift: WishlistGift, status: GiftStatus) {
+    const replace = (value: WishlistGift) =>
+      setGifts((current) => (current ?? []).map((item) => (item.id === gift.id ? value : item)));
 
-    apply(status);
+    // Optimistic: flip it now, roll back if the server says no
+    replace({ ...gift, status, claim: status === 'pending' ? null : 'me' });
     try {
-      await request<WishlistGift>(`/api/gifts/${giftId}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ status }),
-      });
+      replace(
+        await request<WishlistGift>(`/api/gifts/${gift.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ status }),
+        })
+      );
       return true;
-    } catch {
-      apply(previous);
-      notifyError("Couldn't update that. Please try again.");
+    } catch (error) {
+      replace(gift);
+      if (error instanceof RequestError && error.status === 409) {
+        // Someone else got there first: show it, and fetch who has what now
+        notifyError(error.message);
+        reload();
+      } else {
+        notifyError("Couldn't update that. Please try again.");
+      }
       return false;
     }
   }

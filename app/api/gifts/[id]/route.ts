@@ -1,7 +1,8 @@
 // app/api/gifts/[id]/route.ts
 import { db } from '@/lib/db';
 import { gifts } from '@/lib/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, isNull } from 'drizzle-orm';
+import { canChangeStatus, toClientGift } from '@/lib/gifts';
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import {
@@ -72,15 +73,52 @@ export async function PATCH(
       );
     }
 
+    if (isStatusUpdate) {
+      const { status } = parsed.data as { status: 'pending' | 'will_buy' | 'bought' };
+
+      // Only whoever claimed a gift can unclaim it or mark it bought
+      if (!canChangeStatus(existingGift, userId)) {
+        return NextResponse.json(
+          { error: 'Someone else is already getting this one.' },
+          { status: 409 }
+        );
+      }
+
+      // Only apply if nobody claimed it in the meantime
+      const [updatedGift] = await db
+        .update(gifts)
+        .set({
+          status,
+          claimedBy: status === 'pending' ? null : userId,
+          updatedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(gifts.id, giftId),
+            existingGift.claimedBy === null
+              ? isNull(gifts.claimedBy)
+              : eq(gifts.claimedBy, existingGift.claimedBy)
+          )
+        )
+        .returning();
+
+      if (!updatedGift) {
+        return NextResponse.json(
+          { error: 'Someone else is already getting this one.' },
+          { status: 409 }
+        );
+      }
+
+      return NextResponse.json(toClientGift(updatedGift, userId));
+    }
+
     const [updatedGift] = await db
       .update(gifts)
       .set({ ...parsed.data, updatedAt: new Date() })
       .where(eq(gifts.id, giftId))
       .returning();
 
-    return NextResponse.json(
-      isOwner ? { ...updatedGift, status: null } : updatedGift
-    );
+    return NextResponse.json(toClientGift(updatedGift, userId));
   } catch (error) {
     console.error('Error updating gift:', error);
     return NextResponse.json({ error: 'Error updating gift' }, { status: 500 });

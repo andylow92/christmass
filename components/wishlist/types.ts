@@ -14,6 +14,8 @@ export interface WishlistGift {
   priceRange: string | null;
   // Always null for the viewer's own gifts: the server keeps the surprise
   status: GiftStatus | null;
+  // 'me' = you're getting it, 'other' = someone else is, null = nobody (or an older claim anyone can change)
+  claim: 'me' | 'other' | null;
   createdAt?: string | null;
 }
 
