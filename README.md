@@ -35,9 +35,16 @@ CREATE TABLE gifts (
   description TEXT,
   price_range TEXT,
   status TEXT DEFAULT 'pending',
+  claimed_by INTEGER REFERENCES users(id),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
+```
+
+**Already have the tables from an older version?** Run this once in the SQL Editor before deploying the latest code (otherwise loading gifts fails with `column "claimed_by" does not exist`):
+
+```sql
+ALTER TABLE gifts ADD COLUMN IF NOT EXISTS claimed_by INTEGER REFERENCES users(id);
 ```
 
 ### Step 2: Deploy to Vercel
@@ -150,7 +157,7 @@ npm start
 | `npm run push` | `drizzle-kit push`: apply the schema straight to the database |
 | `npm run studio` | Drizzle Studio |
 
-The production tables were created with the SQL in Step 1, so you don't need `generate` or `push` to run the app. Use them only if you deliberately change the schema.
+The production tables were created with the SQL in Step 1, so you don't need `generate` or `push` to run the app. Use them only if you deliberately change the schema. When a change adds a column, run the matching `ALTER TABLE` in the Neon SQL Editor before the new code is deployed (see Step 1).
 
 ## Tech Stack
 
